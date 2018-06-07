@@ -50,4 +50,13 @@ class WalkingState(State):
 
     def doState(self):
 
-        
+
+class VibrationState(State):
+
+    def __init(self, int time):
+        self.time = time;
+        self.name = "vibrating";
+
+    def doState(self):
+
+
