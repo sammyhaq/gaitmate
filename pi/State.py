@@ -1,7 +1,9 @@
 
 class State():
 
+    #
     # Constructor.
+    #
     def __init__(self, int time):
         self.time = time;
         self.currentState = "";
@@ -10,7 +12,9 @@ class State():
     def getCurrentState(self):
         return self.currentState;
 
-    # Boolean returns for simple comparisions.
+    #
+    # Boolean functions. Returns true if State() is in respective current state.
+    #
     def isWalking(self):
         if (self.currentState == "walking"):
             return True;
@@ -35,7 +39,9 @@ class State():
         else:
             return False;
 
+    #
     # Functions to change the type of the current state.
+    #
     def changeToWalkingState(self):
         self.currentState = "walking";
 
@@ -48,7 +54,34 @@ class State():
     def changeToPausedState(self):
         self.currentState = "paused";
 
-    # Execution of the State. Abstract method to define in child classes.
+
+    # 
+    # State Decision and Execution Code.
+    #
     def doState(self):
-        pass
+
+        if (isWalking()):
+            doWalkingState();
+
+        if (isVibrating()):
+            doVibratingState();
+
+        if (isRecovering()):
+            doRecoveringState();
+
+        if (isPaused()):
+            doPausedState();
+
+    # Walking State driver code
+    def doWalkingState(self):
+
+    # Vibrating State driver code
+    def doVibratingState(self):
+
+    # Recovery State driver code
+    def doRecoveringState(self);
+
+    # Paused State driver code
+    def doPausedState(self):
+
 
