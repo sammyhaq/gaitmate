@@ -1,62 +1,54 @@
-from abc import ABC, abstractmethod
 
-
-class State(ABC):
+class State():
 
     # Constructor.
     def __init__(self, int time):
         self.time = time;
-        self.type = "";
+        self.currentState = "";
 
     # Gets the type of the State.
-    def getType(self):
-        return self.name;
+    def getCurrentState(self):
+        return self.currentState;
 
     # Boolean returns for simple comparisions.
     def isWalking(self):
-        if (self.name == "walking"):
+        if (self.currentState == "walking"):
             return True;
         else:
             return False;
 
     def isVibrating(self):
-        if (self.name == "vibrating"):
+        if (self.currentState  == "vibrating"):
             return True;
         else:
             return False;
 
     def isRecovering(self):
-        if (self.name == "recovering"):
+        if (self.currentState == "recovering"):
             return True;
         else:
             return False;
 
     def isPaused(self):
-        if (self.name == "paused"):
+        if (self.currentState == "paused"):
             return True;
         else:
             return False;
 
+    # Functions to change the type of the current state.
+    def changeToWalkingState(self):
+        self.currentState = "walking";
+
+    def changeToVibratingState(self):
+        self.currentState = "vibrating";
+
+    def changeToRecoveryState(self):
+        self.currentState = "recovering";
+
+    def changeToPausedState(self):
+        self.currentState = "paused";
+
     # Execution of the State. Abstract method to define in child classes.
-    @abstractmethod
     def doState(self):
         pass
-
-class WalkingState(State):
-
-    def __init__(self, int time):
-        self.time = time;
-        self.name = "walking";
-
-    def doState(self):
-
-
-class VibrationState(State):
-
-    def __init(self, int time):
-        self.time = time;
-        self.name = "vibrating";
-
-    def doState(self):
-
 
