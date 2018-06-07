@@ -1,2 +1,5 @@
 .DS_Store
 arduino/.DS_Store
+*.swp
+*.pyc
+
