@@ -1,3 +1,4 @@
+from enum import Enum
 
 class State():
 
@@ -6,7 +7,7 @@ class State():
     #
     def __init__(self, int time):
         self.time = time;
-        self.currentState = "";
+        self.currentState = StateType.WALKING; # Initial State is Walking.
 
     # Gets the type of the State.
     def getCurrentState(self):
@@ -16,25 +17,25 @@ class State():
     # Boolean functions. Returns true if State() is in respective current state.
     #
     def isWalking(self):
-        if (self.currentState == "walking"):
+        if (self.currentState == StateType.WALKING):
             return True;
         else:
             return False;
 
     def isVibrating(self):
-        if (self.currentState  == "vibrating"):
+        if (self.currentState  == StateType.VIBRATING):
             return True;
         else:
             return False;
 
     def isRecovering(self):
-        if (self.currentState == "recovering"):
+        if (self.currentState == StateType.RECOVERING):
             return True;
         else:
             return False;
 
     def isPaused(self):
-        if (self.currentState == "paused"):
+        if (self.currentState == StateType.PAUSED):
             return True;
         else:
             return False;
@@ -43,16 +44,16 @@ class State():
     # Functions to change the type of the current state.
     #
     def changeToWalkingState(self):
-        self.currentState = "walking";
+        self.currentState = StateType.WALKING;
 
     def changeToVibratingState(self):
-        self.currentState = "vibrating";
+        self.currentState = StateType.VIBRATING;
 
     def changeToRecoveryState(self):
-        self.currentState = "recovering";
+        self.currentState = StateType.RECOVERING;
 
     def changeToPausedState(self):
-        self.currentState = "paused";
+        self.currentState = StateType.PAUSED;
 
 
     # 
@@ -83,5 +84,13 @@ class State():
 
     # Paused State driver code
     def doPausedState(self):
+
+
+class StateType(Enum):
+    WALKING = 1;
+    VIBRATING = 2;
+    RECOVERING = 3;
+    PAUSED = 4;
+
 
 
