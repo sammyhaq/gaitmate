@@ -68,7 +68,7 @@ class Gaitmate:
     #
     def testBuzzer(self):
         print("Testing buzzer..");
-        self.buzzerAction().metronome(1000, 0.375, 5, True);
+        self.buzzerAction().metronome(1000, 0.375, 5);
         print("\t.. done.");
 
     def testGyro(self):
@@ -84,7 +84,7 @@ class Gaitmate:
 
     def testHaptic(self):
         print("Testing haptics..");
-        self.hapticAction().metronome(1000, 0.375, 5, True);
+        self.hapticAction().metronome(1000, 0.375, 5);
         print("\t.. done.");
     
     def testButton(self):
