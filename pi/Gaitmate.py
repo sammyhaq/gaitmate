@@ -5,16 +5,18 @@ import MPU6050
 import Buzzer
 import Button
 import Laser
+import LED
 
 class Gaitmate:
 
-    def __init__(self, gyroAddress, buzzerPin, hapticPin, buttonPin, laserPin):
+    def __init__(self, gyroAddress, buzzerPin, hapticPin, buttonPin, laserPin, ledPin):
 
         self.gyroAddress = gyroAddress;
         self.buzzerPin = buzzerPin;
         self.hapticPin = hapticPin;
         self.buttonPin = buttonPin;
         self.laserPin = laserPin;
+        self.ledPin = ledPin;
 
         self.state = State.State();
         self.gyro = MPU6050.MPU6050(self.gyroAddress);
@@ -22,6 +24,7 @@ class Gaitmate:
         self.haptic = Buzzer.Buzzer(self.hapticPin);
         self.button = Button.Button(self.buttonPin); 
         self.laser = Laser.Laser(self.laserPin);
+        self.led = LED.LED(self.ledPin);
 
     # accessors, just to clean up code..
     def buzzerAction(self):
@@ -39,6 +42,8 @@ class Gaitmate:
     def laserAction(self):
         return self.laser;
 
+    def ledAction(self):
+        return self.led;
     #
     # Assigns/Retrives input integer to the the pin of the corresponding part.
     # Important for successful state operation.
@@ -102,12 +107,20 @@ class Gaitmate:
         print("Will turn on/off continuously. Press ctrl+c to exit.");
 
         try:
-
             while True:
                 self.laserAction().toggle(GPIO.HIGH);
                 time.sleep(0.2);
                 self.laserAction().toggle(GPIO.LOW);
                 time.sleep(0.2);
+        except KeyboardInterrupt:
+            print("\t.. done.");
+
+    def testLED(self):
+        print("Testing LED..");
+        print("Will pulse continuously. Press ctrl+c to exit.");
+
+        try:
+            self.ledAction().breathe();
         except KeyboardInterrupt:
             print("\t.. done.");
 
