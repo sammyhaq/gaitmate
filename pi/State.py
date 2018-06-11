@@ -1,6 +1,6 @@
 from enum import Enum
 
-class State():
+class State:
 
     #
     # Constructor.
@@ -61,11 +61,11 @@ class State():
     def printState(self):
         if (isWalking()):
             print("Walking State");
-        else if (isVibrating()):
+        if (isVibrating()):
             print("Vibrating State");
-        else if (isRecovering()):
+        if (isRecovering()):
             print("Recovery State");
-        else if (isPaused()):
+        if (isPaused()):
             print("Paused State");
 
 class StateType(Enum):

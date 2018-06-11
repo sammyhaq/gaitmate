@@ -6,14 +6,10 @@ class Buzzer:
 
     def __init__(self, pin):
 
-        print("Initializing Buzzer..");
-
         self.pin = pin
         GPIO.setmode(GPIO.BCM);
         GPIO.setup(self.pin, GPIO.IN);
         GPIO.setup(self.pin, GPIO.OUT);
-
-        print(".. Buzzer Initialization Successful.");
 
         sleep(0.5);
 
