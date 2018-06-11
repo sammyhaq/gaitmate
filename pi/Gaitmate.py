@@ -60,25 +60,35 @@ class Gaitmate:
         print("\t.. done.");
 
     def testGyro(self):
-        print("Testing gyro sensor (MPU6050)..");
-        print("Will loop continuously. Press ctrl+c to exit.");
+        print("Testing Gyro..");
 
-        while True:
+        timerEnd = time.timer() + 5;
+
+        while time.timer() < timerEnd:
             print(self.gyroAction().acceleration_toString(2));
             time.sleep(1);
+
+        print("\t.. done.");
 
     def testHaptic(self):
         print("Testing haptics..");
         self.hapticAction().metronome(1000, 0.375, 5, True);
         print("\t.. done.");
-
+        
     def testButton(self):
-        while True:
-            if (self.buttonAction().isPressed()):
-                print("Button is pressed!");
-            else:
-                print("Button is not pressed.");
-            time.sleep(0.2);
+        print("Testing Button..");
+        print("Will loop continuously. Press ctrl+c to exit.");
+        try:
+
+            while True:
+                if (self.buttonAction().isPressed()):
+                    print("Button is pressed!");
+                else:
+                    print("Button is not pressed.");
+                time.sleep(0.2);
+
+        except KeyboardInterrupt:
+            print("\t.. done.");
 
 
     # Execution loop of the Gaitmate.
@@ -114,3 +124,5 @@ class Gaitmate:
     # Paused State driver code
     def State(self):
         return;
+
+
