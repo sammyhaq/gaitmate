@@ -18,4 +18,5 @@ each other.
 	- Author and mark the top of the pi files so far. Add to comment code if necessary.
 	- by GOD, just do the TODO already. Don't be such a lazy about it.
 
-
+### NOTE:
+	- In Pinout, the button sensor pin is set to 22 (BCM 25).
