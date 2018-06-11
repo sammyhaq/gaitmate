@@ -4,21 +4,24 @@ import time
 import MPU6050
 import Buzzer
 import Button
+import Laser
 
 class Gaitmate:
 
-    def __init__(self, gyroAddress, buzzerPin, hapticPin, buttonPin):
+    def __init__(self, gyroAddress, buzzerPin, hapticPin, buttonPin, laserPin):
 
         self.gyroAddress = gyroAddress;
         self.buzzerPin = buzzerPin;
         self.hapticPin = hapticPin;
         self.buttonPin = buttonPin;
+        self.laserPin = laserPin;
 
         self.state = State.State();
         self.gyro = MPU6050.MPU6050(self.gyroAddress);
         self.buzzer = Buzzer.Buzzer(self.buzzerPin);
         self.haptic = Buzzer.Buzzer(self.hapticPin);
         self.button = Button.Button(self.buttonPin); 
+        self.laser = Laser.Laser(self.laserPin);
 
     # accessors, just to clean up code..
     def buzzerAction(self):
@@ -32,6 +35,10 @@ class Gaitmate:
     
     def buttonAction(self):
         return self.button;
+
+    def laserAction(self):
+        return self.laser;
+
     #
     # Assigns/Retrives input integer to the the pin of the corresponding part.
     # Important for successful state operation.
@@ -62,9 +69,9 @@ class Gaitmate:
     def testGyro(self):
         print("Testing Gyro..");
 
-        timerEnd = time.timer() + 5;
+        timerEnd = time.time() + 5;
 
-        while time.timer() < timerEnd:
+        while time.time() < timerEnd:
             print(self.gyroAction().acceleration_toString(2));
             time.sleep(1);
 
@@ -89,6 +96,21 @@ class Gaitmate:
 
         except KeyboardInterrupt:
             print("\t.. done.");
+
+    def testLaser(self):
+        print("Testing Laser..");
+        print("Will turn on/off continuously. Press ctrl+c to exit.");
+
+        try:
+
+            while True:
+                self.laserAction().toggle(GPIO.HIGH);
+                time.sleep(0.2);
+                self.laserAction().toggle(GPIO.LOW);
+                time.sleep(0.2);
+        except KeyboardInterrupt:
+            print("\t.. done.");
+
 
     # Execution loop of the Gaitmate.
     def execute(self):
@@ -123,8 +145,3 @@ class Gaitmate:
     # Paused State driver code
     def State(self):
         return;
-<<<<<<< HEAD
-
-
-=======
->>>>>>> fe7225bdf619915ba8e9303e273de7fd117b498c
