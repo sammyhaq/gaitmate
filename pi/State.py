@@ -5,8 +5,7 @@ class State():
     #
     # Constructor.
     #
-    def __init__(self, int time):
-        self.time = time;
+    def __init__(self):
         self.currentState = StateType.WALKING; # Initial State is Walking.
 
     # Gets the type of the State.
@@ -56,35 +55,18 @@ class State():
         self.currentState = StateType.PAUSED;
 
 
-    # 
-    # State Decision and Execution Code.
     #
-    def doState(self):
-
+    # Prints what state the system is currently in.
+    #
+    def printState(self):
         if (isWalking()):
-            doWalkingState();
-
-        if (isVibrating()):
-            doVibratingState();
-
-        if (isRecovering()):
-            doRecoveringState();
-
-        if (isPaused()):
-            doPausedState();
-
-    # Walking State driver code
-    def doWalkingState(self):
-
-    # Vibrating State driver code
-    def doVibratingState(self):
-
-    # Recovery State driver code
-    def doRecoveringState(self);
-
-    # Paused State driver code
-    def doPausedState(self):
-
+            print("Walking State");
+        else if (isVibrating()):
+            print("Vibrating State");
+        else if (isRecovering()):
+            print("Recovery State");
+        else if (isPaused()):
+            print("Paused State");
 
 class StateType(Enum):
     WALKING = 1;
