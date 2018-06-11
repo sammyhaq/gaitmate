@@ -74,7 +74,7 @@ class Gaitmate:
         print("Testing haptics..");
         self.hapticAction().metronome(1000, 0.375, 5, True);
         print("\t.. done.");
-        
+    
     def testButton(self):
         print("Testing Button..");
         print("Will loop continuously. Press ctrl+c to exit.");
@@ -89,7 +89,6 @@ class Gaitmate:
 
         except KeyboardInterrupt:
             print("\t.. done.");
-
 
     # Execution loop of the Gaitmate.
     def execute(self):
@@ -124,5 +123,8 @@ class Gaitmate:
     # Paused State driver code
     def State(self):
         return;
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> fe7225bdf619915ba8e9303e273de7fd117b498c

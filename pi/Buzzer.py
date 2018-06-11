@@ -59,7 +59,7 @@ class Buzzer:
                 self.playTone(0, delay);
 
 
-# Fun stuff in case want to go more in depth with buzzer, but not necessary
+    # Fun stuff in case want to go more in depth with buzzer, but not necessary
     def prepareSong(self):
         GPIO.setup(self.pin, GPIO.OUT);
         x = 0;
