@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO
 import time
 import MPU6050
 import Buzzer
+import Button
 
 class Gaitmate:
 
@@ -17,7 +18,8 @@ class Gaitmate:
         self.gyro = MPU6050.MPU6050(self.gyroAddress);
         self.buzzer = Buzzer.Buzzer(self.buzzerPin);
         self.haptic = Buzzer.Buzzer(self.hapticPin);
- 
+        self.button = Button.Button(self.buttonPin); 
+
     # accessors, just to clean up code..
     def buzzerAction(self):
         return self.buzzer;
@@ -27,7 +29,9 @@ class Gaitmate:
 
     def hapticAction(self):
         return self.haptic;
-
+    
+    def buttonAction(self):
+        return self.button;
     #
     # Assigns/Retrives input integer to the the pin of the corresponding part.
     # Important for successful state operation.
@@ -67,6 +71,15 @@ class Gaitmate:
         print("Testing haptics..");
         self.hapticAction().metronome(1000, 0.375, 5, True);
         print("\t.. done.");
+
+    def testButton(self):
+        while True:
+            if (self.buttonAction().isPressed()):
+                print("Button is pressed!");
+            else:
+                print("Button is not pressed.");
+            time.sleep(0.2);
+
 
     # Execution loop of the Gaitmate.
     def execute(self):
