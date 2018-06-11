@@ -6,7 +6,7 @@ import buzzer as Buzzer
 
 def main():
     
-    buzzer = Buzzer.Buzzer(17);
+    buzzer = Buzzer.Buzzer(27);
     buzzer.metronome(1000, 0.375, 5, True);
 
     GPIO.cleanup();
