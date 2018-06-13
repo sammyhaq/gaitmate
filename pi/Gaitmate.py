@@ -94,16 +94,16 @@ class Gaitmate:
             return;
         
         # Initializing write file to have the name of the local time and date.
-        self.writer = SaveFileHelper.SaveFileHelper(time.strftime("%m-%d-%y_%H_%M_%S", localtime()));
+        self.writer = SaveFileHelper.SaveFileHelper(time.strftime("%m-%d-%y_%H_%M_%S", time.localtime()));
 
         timerEnd = time.time() + duration;
         delay = 1.0/collectionFrequency;
 
-        while (time() < timerEnd):
-             writerAction().appendToBuffer(
-                     gyroAction().getAccel_X(2),
-                     gyroAction().getAccel_Y(2),
-                     gyroAction().getAccel_Z(2));
+        while (time.time() < timerEnd):
+             self.writerAction().appendToBuffer(
+                     self.gyroAction().getAccel_X(2),
+                     self.gyroAction().getAccel_Y(2),
+                     self.gyroAction().getAccel_Z(2));
 
              time.sleep(delay);
 

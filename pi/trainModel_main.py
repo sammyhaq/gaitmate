@@ -27,3 +27,5 @@ def main():
             controller.writerAction.closeWriter();
 
         GPIO.cleanup();
+
+main();

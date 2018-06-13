@@ -54,12 +54,12 @@ class MPU6050:
         self.address = address; # 0x68 from i2cdetect
 
         bus.write_byte_data(address, PWR_MGMT_1, 0); # ensures power wakeup from sleep
-        bus.write_byte_data(address, SMPLRT_DIV, 7); # delays sample rate to avoid noise
-        bus.write_byte_data(address, CONFIG, 0); # disables DLPF.
+        #bus.write_byte_data(address, SMPLRT_DIV, 7); # delays sample rate to avoid noise
+        #bus.write_byte_data(address, CONFIG, 0); # disables DLPF.
 
     def read_raw_data(self, addr):
-        high = bus.read_byte_data(self.address, addr);
-        low = bus.read_byte_data(self.address, addr+1);
+        high = bus.read_byte_data(0x68, addr);
+        low = bus.read_byte_data(0x68, addr+1);
 
         value = ( (high << 8) | low);
 
