@@ -94,10 +94,13 @@ class Gaitmate:
             return;
         
         # Initializing write file to have the name of the local time and date.
-        self.writer = SaveFileHelper.SaveFileHelper(time.strftime("%m-%d-%y_%H_%M_%S", time.localtime()));
+        fileName = time.strftime("logs/%m-%d-%y_%H%M", time.localtime());
+        print("Creating " + fileName + "..");
+
+        self.writer = SaveFileHelper.SaveFileHelper(fileName);
 
         timerEnd = time.time() + duration;
-        delay = 1.0/collectionFrequency;
+        delay = 1.0/float(collectionFrequency);
 
         while (time.time() < timerEnd):
              self.writerAction().appendToBuffer(
@@ -107,7 +110,10 @@ class Gaitmate:
 
              time.sleep(delay);
 
-        writerAction().dumpBuffer();
+        print("Saving and creating a new filename..");
+        self.writerAction().dumpBuffer();
+
+
     #
     # Test Code. Previously separate main() files, consolidated here.
     #

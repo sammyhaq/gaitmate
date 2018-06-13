@@ -54,8 +54,10 @@ class MPU6050:
         self.address = address; # 0x68 from i2cdetect
 
         bus.write_byte_data(address, PWR_MGMT_1, 0); # ensures power wakeup from sleep
-        #bus.write_byte_data(address, SMPLRT_DIV, 7); # delays sample rate to avoid noise
-        #bus.write_byte_data(address, CONFIG, 0); # disables DLPF.
+        bus.write_byte_data(address, SMPLRT_DIV, 7); # delays sample rate to avoid noise
+        bus.write_byte_data(address, CONFIG, 0); # disables DLPF.
+        
+        time.sleep(1);
 
     def read_raw_data(self, addr):
         high = bus.read_byte_data(0x68, addr);
@@ -67,7 +69,7 @@ class MPU6050:
         if (value > 32768):
             value = value - (32768 * 2);
 
-
+        #time.sleep(0.1);
         return value;
 
     def getAccel_X(self, decimal):
