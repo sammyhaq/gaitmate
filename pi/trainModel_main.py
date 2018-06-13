@@ -23,7 +23,7 @@ def main():
 
 
     except KeyboardInterrupt:
-        if !(controller.writerAction().isClosed()):
+        if not (controller.writerAction().isClosed()):
             controller.writerAction.closeWriter();
 
         GPIO.cleanup();
