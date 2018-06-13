@@ -17,7 +17,7 @@ def main():
     controller = Gaitmate.Gaitmate(0x68, 27, 17, 22, 23, 23);
 
     while True:
-        controller.collectData();
+        controller.collectData(60, 4);
         controller.writerAction().closeWriter();
 
 
