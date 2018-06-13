@@ -41,9 +41,7 @@ class Gaitmate:
         self.laser = Laser.Laser(self.laserPin);
         self.led = LED.LED(self.ledPin);
        
-        # Initializing write file to have the name of the local time and date.
-        self.writer = SaveFileHelper.SaveFileHelper(time.strftime("%m-%d-%y_%H_%M_%S", localtime()));
-        
+
     # accessors, just to clean up code..
     def buzzerAction(self):
         return self.buzzer;
@@ -89,6 +87,10 @@ class Gaitmate:
     # Collects Data for a certain period of time at a certain frequency.
     def collectData(self, duration, collectionFrequency):
         
+        
+        # Initializing write file to have the name of the local time and date.
+        self.writer = SaveFileHelper.SaveFileHelper(time.strftime("%m-%d-%y_%H_%M_%S", localtime()));
+
         timerEnd = time.time() + duration;
         delay = 1.0/collectionFrequency;
 

@@ -7,8 +7,6 @@ Simple driver code for all of the test functions in Gaitmate.py.
 
 """
 
-#! /usr/bin/env python
-
 import Gaitmate
 import RPi.GPIO as GPIO
 
@@ -21,7 +19,6 @@ def main():
 #    controller.testButton();
 #    controller.testLaser();
 #    controller.testLED();
-    controller.collectData();
     GPIO.cleanup();
 
 main();

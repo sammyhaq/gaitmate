@@ -36,5 +36,8 @@ class SaveFileHelper():
         self.buffer = []; # resetting buffer after dump
 
     # Good practice to close the writer after one is done with it.
-    def closeHelper(self):
+    def closeWriter(self):
         self.file.close();
+
+    def isClosed(self):
+        return self.file.closed;
