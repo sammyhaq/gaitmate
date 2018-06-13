@@ -20,3 +20,13 @@ each other.
 
 ### NOTE:
 	- In Pinout, the button sensor pin is set to 22 (BCM 25).
+
+### Ideas on how to implement machine learning algorithm:
+	- each file should be its own feature set.
+		- if only one number is "allowed", perhaps determine how much
+		  the numberset varies throughout the file?
+			- Like a lot of variance = walking, low = shuffling,
+			  none = standing still, etc.
+	- features: x, y, z.
+	- labels: walking, shuffling, stopped.
+	
