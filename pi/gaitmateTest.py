@@ -20,7 +20,6 @@ def main():
 #    controller.testLaser();
 #    controller.testLED();
     controller.collectData();
-
     GPIO.cleanup();
 
 main();
