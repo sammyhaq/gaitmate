@@ -16,9 +16,10 @@ import RPi.GPIO as GPIO
 def main():
     controller = Gaitmate.Gaitmate(0x68, 27, 17, 22, 23, 23);
 
-    while True:
-        controller.collectData(60, 4);
-        controller.writerAction().closeWriter();
+    try:
+        while True:
+            controller.collectData(60, 4);
+            controller.writerAction().closeWriter();
 
 
     except KeyboardInterrupt:

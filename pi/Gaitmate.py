@@ -35,7 +35,7 @@ class Gaitmate:
 
         self.state = State.State();
         self.gyro = MPU6050.MPU6050(self.gyroAddress);
-        self.buzzer = Buzzer.Buzzer(self.buzzerPin
+        self.buzzer = Buzzer.Buzzer(self.buzzerPin);
         self.haptic = Buzzer.Buzzer(self.hapticPin);
         self.button = Button.Button(self.buttonPin); 
         self.laser = Laser.Laser(self.laserPin);
