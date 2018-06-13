@@ -87,6 +87,11 @@ class Gaitmate:
     # Collects Data for a certain period of time at a certain frequency.
     def collectData(self, duration, collectionFrequency):
         
+        if (collectionFrequency == 0):
+            collectionFrequency = 1; # default to 1 collection per second if invalid
+
+        if (duration == 0):
+            return;
         
         # Initializing write file to have the name of the local time and date.
         self.writer = SaveFileHelper.SaveFileHelper(time.strftime("%m-%d-%y_%H_%M_%S", localtime()));
@@ -94,7 +99,7 @@ class Gaitmate:
         timerEnd = time.time() + duration;
         delay = 1.0/collectionFrequency;
 
-        while (time() < timerEnd()):
+        while (time() < timerEnd):
              writerAction().appendToBuffer(
                      gyroAction().getAccel_X(2),
                      gyroAction().getAccel_Y(2),
