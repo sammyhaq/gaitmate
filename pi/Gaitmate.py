@@ -35,15 +35,13 @@ class Gaitmate:
 
         self.state = State.State();
         self.gyro = MPU6050.MPU6050(self.gyroAddress);
-        self.buzzer = Buzzer.Buzzer(self.buzzerPin
+        self.buzzer = Buzzer.Buzzer(self.buzzerPin);
         self.haptic = Buzzer.Buzzer(self.hapticPin);
         self.button = Button.Button(self.buttonPin); 
         self.laser = Laser.Laser(self.laserPin);
         self.led = LED.LED(self.ledPin);
        
-        # Initializing write file to have the name of the local time and date.
-        self.writer = SaveFileHelper.SaveFileHelper(time.strftime("%m-%d-%y_%H_%M_%S", localtime()));
-        
+
     # accessors, just to clean up code..
     def buzzerAction(self):
         return self.buzzer;
@@ -89,10 +87,19 @@ class Gaitmate:
     # Collects Data for a certain period of time at a certain frequency.
     def collectData(self, duration, collectionFrequency):
         
+        if (collectionFrequency == 0):
+            collectionFrequency = 1; # default to 1 collection per second if invalid
+
+        if (duration == 0):
+            return;
+        
+        # Initializing write file to have the name of the local time and date.
+        self.writer = SaveFileHelper.SaveFileHelper(time.strftime("%m-%d-%y_%H_%M_%S", localtime()));
+
         timerEnd = time.time() + duration;
         delay = 1.0/collectionFrequency;
 
-        while (time() < timerEnd()):
+        while (time() < timerEnd):
              writerAction().appendToBuffer(
                      gyroAction().getAccel_X(2),
                      gyroAction().getAccel_Y(2),
