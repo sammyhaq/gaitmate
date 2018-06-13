@@ -1,3 +1,13 @@
+"""
+loadFileTester.py
+Code by Sammy Haq
+https://github.com/sammyhaq
+
+Driver code for testing LoadFileHelper.py -- dependent on SaveFileHelper.py to
+initially save the file to test.
+
+"""
+
 import LoadFileHelper
 import SaveFileHelper
 

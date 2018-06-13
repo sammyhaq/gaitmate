@@ -1,6 +1,7 @@
 """
 Buzzer.py
 Code by Sammy Haq
+https://github.com/sammyhaq
 
 Class for using a buzzer with Raspberry Pi GPIO pins.
 Can also be used for a vibrating motor, or haptic feedback

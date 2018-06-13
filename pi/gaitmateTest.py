@@ -1,3 +1,12 @@
+"""
+gaitmateTest.py
+Code by Sammy Haq
+https://github.com/sammyhaq
+
+Simple driver code for all of the test functions in Gaitmate.py.
+
+"""
+
 import Gaitmate
 import RPi.GPIO as GPIO
 
@@ -9,7 +18,8 @@ def main():
 #    controller.testGyro();
 #    controller.testButton();
 #    controller.testLaser();
-    controller.testLED();
+#    controller.testLED();
+    controller.collectData();
 
     GPIO.cleanup();
 

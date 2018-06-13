@@ -1,6 +1,7 @@
 """
 LoadFileHelper.py
 Code by Sammy Haq
+https://github.com/sammyhaq
 
 Class for loading x,y,z data from a .csv-like file.
 The functionality of this program is shown in loadFileTester.py

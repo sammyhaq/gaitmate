@@ -1,3 +1,16 @@
+"""
+Gaitmate.py
+Code by Sammy Haq
+https://github.com/sammyhaq
+
+Class for pulling all of the libraries defined in this folder together.
+Contains everything, from the primary assignment of pins to creating a save buffer
+to save the data collected. Basically, this .py acts as the front end for all of
+the other code. This may be the first thing to try to edit if something goes wrong.
+
+"""
+
+
 import State as State
 import RPi.GPIO as GPIO
 import time
@@ -6,6 +19,8 @@ import Buzzer
 import Button
 import Laser
 import LED
+import SaveFileHelper
+import LoadFileHelper
 
 class Gaitmate:
 
@@ -20,12 +35,15 @@ class Gaitmate:
 
         self.state = State.State();
         self.gyro = MPU6050.MPU6050(self.gyroAddress);
-        self.buzzer = Buzzer.Buzzer(self.buzzerPin);
+        self.buzzer = Buzzer.Buzzer(self.buzzerPin
         self.haptic = Buzzer.Buzzer(self.hapticPin);
         self.button = Button.Button(self.buttonPin); 
         self.laser = Laser.Laser(self.laserPin);
         self.led = LED.LED(self.ledPin);
-
+       
+        # Initializing write file to have the name of the local time and date.
+        self.writer = SaveFileHelper.SaveFileHelper(time.strftime("%m-%d-%y_%H_%M_%S", localtime()));
+        
     # accessors, just to clean up code..
     def buzzerAction(self):
         return self.buzzer;
@@ -44,6 +62,10 @@ class Gaitmate:
 
     def ledAction(self):
         return self.led;
+
+    def writerAction(self):
+        return self.writer;
+
     #
     # Assigns/Retrives input integer to the the pin of the corresponding part.
     # Important for successful state operation.
@@ -63,6 +85,22 @@ class Gaitmate:
     def getState(self):
         return self.State;
 
+        
+    # Collects Data for a certain period of time at a certain frequency.
+    def collectData(self, duration, collectionFrequency):
+        
+        timerEnd = time.time() + duration;
+        delay = 1.0/collectionFrequency;
+
+        while (time() < timerEnd()):
+             writerAction().appendToBuffer(
+                     gyroAction().getAccel_X(2),
+                     gyroAction().getAccel_Y(2),
+                     gyroAction().getAccel_Z(2));
+
+             time.sleep(delay);
+
+        writerAction().dumpBuffer();
     #
     # Test Code. Previously separate main() files, consolidated here.
     #
@@ -123,7 +161,6 @@ class Gaitmate:
             self.ledAction().breathe();
         except KeyboardInterrupt:
             print("\t.. done.");
-
 
     # Execution loop of the Gaitmate.
     def execute(self):

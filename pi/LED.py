@@ -1,6 +1,7 @@
 """
 LED.py
 Code by Sammy Haq
+https://github.com/sammyhaq
 
 Simple class for using a LED with Raspberry Pi GPIO pins.
 LEDs are unidirectional, meaning it matters which way the pins

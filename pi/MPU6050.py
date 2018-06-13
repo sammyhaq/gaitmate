@@ -1,3 +1,12 @@
+"""
+MPU6050.py
+Code by Sammy Haq
+https://github.com/sammyhaq
+
+Class for operating the MPU6050 accelerometer/gyro chip.
+
+"""
+
 import smbus
 import math
 import time

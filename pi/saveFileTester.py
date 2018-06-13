@@ -1,3 +1,12 @@
+"""
+saveFileTester.py
+Code by Sammy Haq
+https://githhub.com/sammyhaq
+
+Simple driver code for testing out SaveFileHelper.py
+
+"""
+
 import SaveFileHelper
 
 def main():

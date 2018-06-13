@@ -1,6 +1,7 @@
 """
 Button.py
 Code by Sammy Haq
+https://github.com/sammyhaq
 
 Simple class for using a button with Raspberry Pi GPIO pins.
 Button should be in series with a resistor before touching ground.

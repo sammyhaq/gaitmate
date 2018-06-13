@@ -1,6 +1,7 @@
 """
 Laser.py
 Code by Sammy Haq
+https://github.com/sammyhaq
 
 Simple class for using a laser (or light) with Raspberry Pi GPIO pins.
 No resistor needed. Connect positive end to a BCM pin of your choice
