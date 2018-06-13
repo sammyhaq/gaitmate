@@ -29,4 +29,17 @@ each other.
 			  none = standing still, etc.
 	- features: x, y, z.
 	- labels: walking, shuffling, stopped.
-	
+
+
+
+
+
+# DIRECTIONS FOR ZACH
+	- To get all the updated files:
+		- git pull origin master
+	- To run the test code:
+		- Go to the home directory of the project:
+			- cd ~/gaitmate/pi/
+		- Run the code:
+			- python gaitmateTest.py
+
