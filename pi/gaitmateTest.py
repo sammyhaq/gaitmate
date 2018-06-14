@@ -11,7 +11,16 @@ import Gaitmate
 import RPi.GPIO as GPIO
 
 def main():
-    controller = Gaitmate.Gaitmate(0x68, 27, 17, 22, 23, 23);
+
+    ## PINOUT ##
+    # Buzzer:  PIN 11   BCM 17
+    # Haptic:  PIN 13   BCM 27
+    # LED:     PIN 15   BCM 22
+    # Button:  PIN 31   BCM 6
+    # Laser:   PIN 29   BCM 5
+    ##
+
+    controller = Gaitmate.Gaitmate(0x68, 17, 27, 6, 5, 22);
 
     controller.testBuzzer();
     controller.testHaptic();
