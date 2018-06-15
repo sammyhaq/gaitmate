@@ -15,12 +15,10 @@ import State as State
 import RPi.GPIO as GPIO
 import time
 import MPU6050
-import Buzzer
 import Button
-import Laser
-import LED
 import SaveFileHelper
 import LoadFileHelper
+import OutputComponent
 
 class Gaitmate:
 
@@ -35,11 +33,11 @@ class Gaitmate:
 
         self.state = State.State();
         self.gyro = MPU6050.MPU6050(self.gyroAddress);
-        self.buzzer = Buzzer.Buzzer(self.buzzerPin);
-        self.haptic = Buzzer.Buzzer(self.hapticPin);
+        self.buzzer = OutputComponent.OutputComponent(self.buzzerPin);
+        self.haptic = OutputComponent.OutputComponent(self.hapticPin);
         self.button = Button.Button(self.buttonPin); 
-        self.laser = Laser.Laser(self.laserPin);
-        self.led = LED.LED(self.ledPin);
+        self.laser = OutputComponent.OutputComponent(self.laserPin);
+        self.led = OutputComponent.OutputComponent(self.ledPin);
        
 
     # accessors, just to clean up code..
@@ -113,13 +111,12 @@ class Gaitmate:
         print("Saving and creating a new filename..");
         self.writerAction().dumpBuffer();
 
-
     #
     # Test Code. Previously separate main() files, consolidated here.
     #
     def testBuzzer(self):
         print("Testing buzzer..");
-        self.buzzerAction().metronome(1000, 0.375, 5);
+        self.buzzerAction().metronome(0.375, 5);
         print("\t.. done.\n");
 
     def testGyro(self):
@@ -135,7 +132,7 @@ class Gaitmate:
 
     def testHaptic(self):
         print("Testing haptics..");
-        self.hapticAction().metronome(1000, 0.375, 5);
+        self.hapticAction().metronome(0.375, 5);
         print("\t.. done.\n");
     
     def testButton(self):
@@ -159,10 +156,7 @@ class Gaitmate:
 
         try:
             while True:
-                self.laserAction().toggle(GPIO.HIGH);
-                time.sleep(0.2);
-                self.laserAction().toggle(GPIO.LOW);
-                time.sleep(0.2);
+                self.laserAction().step(0.2);
         except KeyboardInterrupt:
             print("\t.. done.\n");
 
@@ -171,7 +165,7 @@ class Gaitmate:
         print("Will pulse continuously. Press ctrl+c to exit.");
 
         try:
-            self.ledAction().breathe();
+            self.ledAction().metronome(0.375, 5);
         except KeyboardInterrupt:
             print("\t.. done.\n");
 
