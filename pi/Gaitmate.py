@@ -83,6 +83,7 @@ class Gaitmate:
 
         
     # Collects Data for a certain period of time at a certain frequency.
+    # Returns true if the button is not pressed. Returns false if the button is pressed. 
     def collectData(self, duration, collectionFrequency, accuracy):
         
         if (collectionFrequency == 0):
@@ -108,14 +109,17 @@ class Gaitmate:
 
             # Code that stops script when button is pressed.
             if (self.buttonAction().isPressed()):
-                self.writerAction().dumpBuffer();
                 self.ledAction().toggleOff();
-                sys.exit("Button pressed, exiting..");
+                time.sleep(3);
+                self.writerAction().dumpBuffer();
+                return False;
+
 
             time.sleep(delay);
 
         print("Saving and creating a new filename..");
         self.writerAction().dumpBuffer();
+        return True;
 
     #
     # Test Code. Previously separate main() files, consolidated here.

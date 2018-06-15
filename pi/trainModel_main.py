@@ -10,7 +10,7 @@ Takes 4 data points per second.
 """
 
 
-
+import time
 import Gaitmate
 import RPi.GPIO as GPIO
 
@@ -30,9 +30,23 @@ def main():
             controller.ledAction().toggleOn();
 
             # Collecting new dataset every 10 seconds, 4 points a second, 3 decimal places
-            controller.collectData(10, 4, 3);
+            isCollecting = controller.collectData(10, 4, 3);
             
             controller.writerAction().closeWriter();
+            
+
+            if (isCollecting):
+                continue;
+            else:
+                time.sleep(5);
+                
+                while True:
+                    if (controller.buttonAction().isPressed()):  
+                        controller.ledAction().toggleOn();
+                        time.sleep(3);
+                        isCollecting = True;
+                        break;
+
 
     except KeyboardInterrupt:
         if not (controller.writerAction().isClosed()):
