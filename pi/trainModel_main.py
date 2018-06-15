@@ -14,11 +14,20 @@ import Gaitmate
 import RPi.GPIO as GPIO
 
 def main():
-    controller = Gaitmate.Gaitmate(0x68, 27, 17, 22, 23, 23);
+    ## PINOUT ##
+    # Buzzer:  PIN 11   BCM 17
+    # Haptic:  PIN 13   BCM 27
+    # LED:     PIN 22   BCM 25
+    # Button:  PIN 31   BCM 6
+    # Laser:   PIN 29   BCM 5
+    ##
+
+    controller = Gaitmate.Gaitmate(0x68, 17, 27, 6, 5, 25);
 
     try:
         while True:
-            controller.collectData(60, 4, 4);
+            # Collecting new dataset every 10 seconds, 4 points a second, 3 decimal places
+            controller.collectData(10, 4, 3);
             controller.writerAction().closeWriter();
 
 

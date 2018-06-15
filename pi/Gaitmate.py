@@ -92,7 +92,7 @@ class Gaitmate:
             return;
         
         # Initializing write file to have the name of the local time and date.
-        fileName = time.strftime("logs/%m-%d-%y_%H%M", time.localtime());
+        fileName = time.strftime("logs/%m-%d-%y_%H%M%S", time.localtime());
         print("Creating " + fileName + "..");
 
         self.writer = SaveFileHelper.SaveFileHelper(fileName);
