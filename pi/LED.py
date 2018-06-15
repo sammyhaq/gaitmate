@@ -34,17 +34,9 @@ class LED:
     #  OFF: switchVar -> GPIO.LOW
     def toggle(self, switchVar):
         if (switchVar == GPIO.HIGH):
-            self.toggleON();
+            GPIO.output(self.pin, GPIO.HIGH);
         else:
-            self.toggleOFF();
-
-    # Simple functions to just turn the LED on or off.
-    def toggleON(self):
-        GPIO.output(self.pin, GPIO.HIGH);
-
-    def toggleOFF(self):
-        GPIO.output(self.pin, GPIO.LOW);
-
+            GPIO.output(self.pin, GPIO.LOW);
 
     # Slowly pulses the LED. Displays how PWM can be used in essentially
     # any BCM pin.
