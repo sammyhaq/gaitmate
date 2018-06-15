@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 trainModel_main.py
 Code by Sammy Haq
@@ -8,7 +10,6 @@ Takes 4 data points per second.
 """
 
 
-#!/usr/bin/env python
 
 import Gaitmate
 import RPi.GPIO as GPIO
