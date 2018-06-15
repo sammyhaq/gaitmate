@@ -85,7 +85,7 @@ class Gaitmate:
 
         
     # Collects Data for a certain period of time at a certain frequency.
-    def collectData(self, duration, collectionFrequency):
+    def collectData(self, duration, collectionFrequency, accuracy):
         
         if (collectionFrequency == 0):
             collectionFrequency = 1; # default to 1 collection per second if invalid
@@ -104,9 +104,9 @@ class Gaitmate:
 
         while (time.time() < timerEnd):
              self.writerAction().appendToBuffer(
-                     self.gyroAction().getAccel_X(2),
-                     self.gyroAction().getAccel_Y(2),
-                     self.gyroAction().getAccel_Z(2));
+                     self.gyroAction().getAccel_X(accuracy),
+                     self.gyroAction().getAccel_Y(accuracy),
+                     self.gyroAction().getAccel_Z(accuracy));
 
              time.sleep(delay);
 
@@ -128,7 +128,7 @@ class Gaitmate:
         timerEnd = time.time() + 5;
 
         while time.time() < timerEnd:
-            print(self.gyroAction().acceleration_toString(2));
+            print(self.gyroAction().acceleration_toString(4));
             time.sleep(1);
 
         print("\t.. done.\n");

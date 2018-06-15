@@ -18,7 +18,7 @@ def main():
 
     try:
         while True:
-            controller.collectData(60, 4);
+            controller.collectData(60, 4, 4);
             controller.writerAction().closeWriter();
 
 
