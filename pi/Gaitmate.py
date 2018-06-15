@@ -1,4 +1,4 @@
-"""
+""
 Gaitmate.py
 Code by Sammy Haq
 https://github.com/sammyhaq
@@ -120,7 +120,7 @@ class Gaitmate:
     def testBuzzer(self):
         print("Testing buzzer..");
         self.buzzerAction().metronome(1000, 0.375, 5);
-        print("\t.. done.");
+        print("\t.. done.\n");
 
     def testGyro(self):
         print("Testing Gyro..");
@@ -131,12 +131,12 @@ class Gaitmate:
             print(self.gyroAction().acceleration_toString(2));
             time.sleep(1);
 
-        print("\t.. done.");
+        print("\t.. done.\n");
 
     def testHaptic(self):
         print("Testing haptics..");
         self.hapticAction().metronome(1000, 0.375, 5);
-        print("\t.. done.");
+        print("\t.. done.\n");
     
     def testButton(self):
         print("Testing Button..");
@@ -151,7 +151,7 @@ class Gaitmate:
                 time.sleep(0.2);
 
         except KeyboardInterrupt:
-            print("\t.. done.");
+            print("\t.. done.\n");
 
     def testLaser(self):
         print("Testing Laser..");
@@ -164,7 +164,7 @@ class Gaitmate:
                 self.laserAction().toggle(GPIO.LOW);
                 time.sleep(0.2);
         except KeyboardInterrupt:
-            print("\t.. done.");
+            print("\t.. done.\n");
 
     def testLED(self):
         print("Testing LED..");
@@ -173,7 +173,7 @@ class Gaitmate:
         try:
             self.ledAction().breathe();
         except KeyboardInterrupt:
-            print("\t.. done.");
+            print("\t.. done.\n");
 
     # Execution loop of the Gaitmate.
     def execute(self):
