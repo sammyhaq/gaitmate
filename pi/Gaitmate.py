@@ -10,7 +10,7 @@ the other code. This may be the first thing to try to edit if something goes wro
 
 """
 
-
+import sys
 import State as State
 import RPi.GPIO as GPIO
 import time
@@ -101,12 +101,18 @@ class Gaitmate:
         delay = 1.0/float(collectionFrequency);
 
         while (time.time() < timerEnd):
-             self.writerAction().appendToBuffer(
-                     self.gyroAction().getAccel_X(accuracy),
-                     self.gyroAction().getAccel_Y(accuracy),
-                     self.gyroAction().getAccel_Z(accuracy));
+            self.writerAction().appendToBuffer(
+                    self.gyroAction().getAccel_X(accuracy),
+                    self.gyroAction().getAccel_Y(accuracy),
+                    self.gyroAction().getAccel_Z(accuracy));
 
-             time.sleep(delay);
+            # Code that stops script when button is pressed.
+            if (self.buttonAction().isPressed()):
+                self.writerAction().dumpBuffer();
+                self.ledAction().toggleOff();
+                sys.exit("Button pressed, exiting..");
+
+            time.sleep(delay);
 
         print("Saving and creating a new filename..");
         self.writerAction().dumpBuffer();

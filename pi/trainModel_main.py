@@ -26,15 +26,18 @@ def main():
 
     try:
         while True:
+            controller.ledAction().toggleOn();
+
             # Collecting new dataset every 10 seconds, 4 points a second, 3 decimal places
             controller.collectData(10, 4, 3);
+            
             controller.writerAction().closeWriter();
-
 
     except KeyboardInterrupt:
         if not (controller.writerAction().isClosed()):
             controller.writerAction().closeWriter();
 
+        controller.ledAction().toggleOff();
         GPIO.cleanup();
 
 main();
