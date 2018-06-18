@@ -10,7 +10,7 @@ the other code. This may be the first thing to try to edit if something goes wro
 
 """
 
-
+import sys
 import State as State
 import RPi.GPIO as GPIO
 import time
@@ -83,6 +83,7 @@ class Gaitmate:
 
         
     # Collects Data for a certain period of time at a certain frequency.
+    # Returns true if the button is not pressed. Returns false if the button is pressed. 
     def collectData(self, duration, collectionFrequency, accuracy):
         
         if (collectionFrequency == 0):
@@ -92,7 +93,7 @@ class Gaitmate:
             return;
         
         # Initializing write file to have the name of the local time and date.
-        fileName = time.strftime("logs/%m-%d-%y_%H%M", time.localtime());
+        fileName = time.strftime("/home/pi/gaitmate/pi/logs/%m-%d-%y_%H%M%S", time.localtime());
         print("Creating " + fileName + "..");
 
         self.writer = SaveFileHelper.SaveFileHelper(fileName);
@@ -101,15 +102,24 @@ class Gaitmate:
         delay = 1.0/float(collectionFrequency);
 
         while (time.time() < timerEnd):
-             self.writerAction().appendToBuffer(
-                     self.gyroAction().getAccel_X(accuracy),
-                     self.gyroAction().getAccel_Y(accuracy),
-                     self.gyroAction().getAccel_Z(accuracy));
+            self.writerAction().appendToBuffer(
+                    self.gyroAction().getAccel_X(accuracy),
+                    self.gyroAction().getAccel_Y(accuracy),
+                    self.gyroAction().getAccel_Z(accuracy));
 
-             time.sleep(delay);
+            # Code that stops script when button is pressed.
+            if (self.buttonAction().isPressed()):
+                self.ledAction().toggleOff();
+                time.sleep(3);
+                self.writerAction().dumpBuffer();
+                return False;
+
+
+            time.sleep(delay);
 
         print("Saving and creating a new filename..");
         self.writerAction().dumpBuffer();
+        return True;
 
     #
     # Test Code. Previously separate main() files, consolidated here.
