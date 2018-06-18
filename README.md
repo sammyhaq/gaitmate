@@ -80,7 +80,7 @@ of this class can be tested by using the driver code found in
 
 ##### [`State.py`](pi/State.py)
 
-**WIP**
+*WIP* 
 
 ##### [`trainModel_main.py`](pi/trainModel_main.py)
 This driver code contains code for saving data in order to train a machine
@@ -96,7 +96,6 @@ and then. To update the code simply type:
 git pull origin master
 ```
 **Note that this requires your information -- this means your username and
-w
 password for [GitHub](https://www.github.com/).** If you don't have permission to access the files (these files are located in a private respository), email me at sammy.haq1@gmail.com (or just request permission through GitHub).
 
 ####
