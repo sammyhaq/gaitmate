@@ -1,9 +1,9 @@
 # GaitMate
-## Zach Samalonis, Jess Montelone, Abigail Balster, Sammy Haq
-## Developed for the RESNA 2018 Student Design Competition.
+#### Zach Samalonis, Jess Montelone, Abigail Balster, Sammy Haq
+#### Developed for the RESNA 2018 Student Design Competition.
 
 
-### OVERVIEW
+### Overview
 
 This project's goal is to provide a wearable device for patients with
 Parkinson's Syndrome that aids the recovery of gait initiation failure,
@@ -15,7 +15,7 @@ The purpose of this README is to help aid in navigation of the project
 files, and hopefully provide an overview of how the files interface with
 each other.
 
-### FILE LIST
+### File Breakdown
 
 The following section was created in order to help explain the structure of the
 code and give an inkling as to what the purpose of each .py file in this
@@ -121,7 +121,7 @@ wanted to open MPU6050.py:
 ```
 nano MPU6050.py
 ```
-To run any python script (`ledTest.py`,`trainModel\_main.py`, `gaitmateTest.py`), enter in the following:
+To run any python script (`ledTest.py`,`trainModel_main.py`, `gaitmateTest.py`), enter in the following:
 ```
 python gaitmateTest.py
 ```
