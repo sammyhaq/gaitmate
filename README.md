@@ -1,7 +1,6 @@
 # GaitMate
-#### Zach Samalonis, Jess Montelone, Abigail Balster, Sammy Haq
-#### Developed for the RESNA 2018 Student Design Competition.
-
+By: Zach Samalonis, Jess Montelone, Abigail Balster, Sammy Haq
+Developed for the RESNA 2018 Student Design Competition.
 
 ### Overview
 
