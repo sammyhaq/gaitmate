@@ -71,15 +71,19 @@ class LoadFileHelper():
 
         return data
 
+    # Returns the pythagorean magnitude's variance.
     def getDataVariance(self):
         return np.var(self.getData_Magnitude())
 
+    # Returns the x variance.
     def getDataVariance_X(self):
         return np.var(self.getData_X())
 
+    # Returns the y data's variance.
     def getDataVariance_Y(self):
         return np.var(self.getData_Y())
 
+    # Returns the z data's variance.
     def getDataVariance_Z(self):
         return np.var(self.getData_Z())
 
