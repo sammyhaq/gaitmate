@@ -138,4 +138,5 @@ Let me know if you have any questions via email. If it's immediate, ask Zach for
 			  none = standing still, etc.
 	- features: x, y, z.
 	- labels: walking, shuffling, stopped.
-
+	- Integrate the acceleration data like you did for the MATLAB rocket
+	  stuff, then use that to get velocity -- just check if velocity is zero
