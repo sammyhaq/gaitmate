@@ -43,6 +43,7 @@ class LoadFileHelper():
             except ValueError:
                 continue
             except IndexError:
+                self.x.remove(len(self.x)-1)
                 continue
 
     # Returns the x data as a list of floats.
