@@ -41,7 +41,9 @@ class LoadFileHelper():
                     math.pow(float(parsedLine[1]), 2) +
                     math.pow(float(parsedLine[2]), 2)))
             except ValueError:
-                continue;
+                continue
+            except IndexError:
+                continue
 
     # Returns the x data as a list of floats.
     def getData_X(self):
