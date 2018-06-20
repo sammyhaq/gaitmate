@@ -7,7 +7,8 @@ Class for loading x,y,z data from a .csv-like file.
 The functionality of this program is shown in loadFileTester.py
 
 """
-
+import math
+import numpy as np
 
 class LoadFileHelper():
 
@@ -18,6 +19,7 @@ class LoadFileHelper():
         self.x = []
         self.y = []
         self.z = []
+        self.magnitude = []
 
     # Returns all the raw data.
     def returnRawFile(self):
@@ -29,11 +31,17 @@ class LoadFileHelper():
         for line in self.file.readlines():
             parsedLine = line.split(",")
 
-            print(parsedLine[0])
+            try:
 
-            self.x.append(float(parsedLine[0]))
-            self.y.append(float(parsedLine[1]))
-            self.z.append(float(parsedLine[2]))
+                self.x.append(float(parsedLine[0]))
+                self.y.append(float(parsedLine[1]))
+                self.z.append(float(parsedLine[2]))
+
+                self.magnitude.append(math.sqrt(math.pow(float(parsedLine[0]), 2) +
+                    math.pow(float(parsedLine[1]), 2) +
+                    math.pow(float(parsedLine[2]), 2)))
+            except ValueError:
+                continue;
 
     # Returns the x data as a list of floats.
     def getData_X(self):
@@ -47,11 +55,32 @@ class LoadFileHelper():
     def getData_Z(self):
         return self.z
 
+    # Returns the x, y, z data as a pythagorean magnitude.
+    def getData_Magnitude(self):
+        return self.magnitude
+
     # Packages and returns all data as a nested list of floats.
     def getData(self):
+
         data = []
         data.append(self.x)
         data.append(self.y)
         data.append(self.z)
 
         return data
+
+    def getDataVariance(self):
+        return np.var(self.getData_Magnitude())
+
+    def getDataVariance_X(self):
+        return np.var(self.getData_X())
+
+    def getDataVariance_Y(self):
+        return np.var(self.getData_Y())
+
+    def getDataVariance_Z(self):
+        return np.var(self.getData_Z())
+
+
+
+        
