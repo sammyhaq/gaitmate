@@ -36,13 +36,19 @@ def main():
 
     for i in range(len(fileList)):
         print(fileList[i] + "\n")
+    print("Amount of points: " + str(len(fileList)) + "\n")
 
     print("Attempting to cluster..")
     clusterer = Clusterer(fileList)
     print(" ..done.\n")
 
     print("Printing results:")
-    print(clusterer.results.labels_)
+    print("\tWalking Data labels:")
+    print("\t\t" + str(clusterer.results.labels_[:len(walkingFileList)]))
+    print("\tStanding Data labels:")
+    print("\t\t" + str(clusterer.results.labels_[len(walkingFileList):]))
+
+
 
 main()
 

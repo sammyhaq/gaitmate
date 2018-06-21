@@ -43,9 +43,15 @@ class LoadFileHelper():
             except ValueError:
                 continue
             except IndexError:
-                self.x.remove(len(self.x)-1)
                 continue
+        
+        # snipping rows.. (credit to https://github.com/rollinsjw)
+        while (len(self.x) > len(self.z)):
+            self.x.pop()
+        while (len(self.y) > len(self.z)):
+            self.y.pop()
 
+        
     # Returns the x data as a list of floats.
     def getData_X(self):
         return self.x
