@@ -4,12 +4,13 @@ import numpy as np
 import LoadFileHelper
 import os
 import sys
-
+from enum import Enum
 
 class Clusterer:
 
     def __init__(self, filenames):
         self.X = []
+        self.Y = ["Shuffling", "Standing", "Walking"]
 
         for i in range(len(filenames)):
             loader = LoadFileHelper.LoadFileHelper(filenames[i])
@@ -26,10 +27,9 @@ class Clusterer:
                            loader.getDataVariance_Z()])
 
     def doKMeansCluster(self):
-        return KMeans(n_clusters=3, random_state=0).fit(np.array(self.X))
+        return KMeans(n_clusters=3, random_state=0).fit(np.array(self.X), np.array(self.Y))
 
     def trainSVC(self):
-        self.Y = ["Standing", "Sitting", "Shuffling"]
 
         self.clf = svm.SVC()
         self.clf.fit(self.X, self.Y)
@@ -37,6 +37,16 @@ class Clusterer:
     def predictSVC(self, feature):
         return str(self.clf.predict(feature).item(0))
 
+def runOptions():
+    print("\n\t************************")
+    print("\t* Run Options (--help) *")
+    print("\t************************\n")
+    print("\t'python " + str(sys.argv[0]) +
+            "'\t\t\tDefault. Runs both KMeans and SVC Cluster and shows results.")
+    print("\t'python " + str(sys.argv[0]) +" SVC'" +
+        "\t\tRuns the SVC Test only.")
+    print("\t'python " + str(sys.argv[0]) +" KMeans'" +
+        "\t\tRuns the KMeans Test only.")
 
 def execute():
 
@@ -52,11 +62,16 @@ def execute():
     if (len(sys.argv) == 1):
         runSVC = True
         runKMeans = True
+    if ("--help" in sys.argv):
+        runOptions()
+        sys.exit()
     if ("SVC" in sys.argv):
         runSVC = True
     if ("KMeans" in sys.argv):
         runKMeans = True
-
+    else:
+        print("\tInvalid execution / command line arguments.")
+        print("type 'python Clusterer.py --help' for information.")
     print("\n\t************************")
     print("\t* Command Line Options *")
     print("\t************************\n")
@@ -112,6 +127,8 @@ def execute():
 
     if (runKMeans):
 
+        kMeansResults = clusterer.doKMeansCluster()
+
         print("\n############################")
         print("# Printing KMeans Results: #")
         print("############################\n")
@@ -124,7 +141,7 @@ def execute():
         for i in range(len(walkingFileList)):
             print("\t\t" + str(i+1) + "\t" +
                   walkingFileList[i] + "\t" +
-                  str(clusterer.doKMeansCluster().labels_[i]))
+                  str(kMeansResults.labels_[i]))
 
         print("\n\t*************************")
         print("\t* Standing Data labels: *")
@@ -134,20 +151,27 @@ def execute():
         for i in range(len(standingFileList)):
             print("\t\t" + str(i+1) + "\t" +
                   standingFileList[i] + "\t" +
-                  str(clusterer.doKMeansCluster().labels_[i +
+                  str(kMeansResults.labels_[i +
                       len(walkingFileList)]))
+
+
 
         print("\n\t**************************")
         print("\t* Shuffling Data labels: *")
         print("\t**************************\n")
         print("\t\tData#\tFilename\tLabel")
         print("\t\t-----------------------------")
-        for i in range(len(shufflingFileList)):
+    for i in range(len(shufflingFileList)):
+        try:
             print("\t\t" + str(i+1) + "\t" +
                   shufflingFileList[i] + "\t" +
-                  str(clusterer.doKMeansCluster().labels_[i +
+                  str(kMeansResults.labels_[i +
                       len(walkingFileList) +
-                      len(shufflingFileList) - 1]))
+                      len(shufflingFileList) - 2]))
+        except IndexError:
+            print("Index at: " + str(i))
+            print(str(kMeansResults.labels_.size()))
+            raise
 
     if (runSVC): 
         print("\n#########################")
