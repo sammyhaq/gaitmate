@@ -4,7 +4,7 @@
 trainModel_main.py
 Code by Sammy Haq
 
-Driver code for the system to just collect data, making a new file every minute.
+Driver code for the system to just collect data, making a new file every 5 seconds.
 Takes 4 data points per second.
 
 """
@@ -30,9 +30,9 @@ def main():
         while True:
             controller.ledAction().toggleOn()
 
-            # Collecting new dataset every 10 seconds, 4 points a second,
-            # 3 decimal places..
-            isCollecting = controller.collectData(10, 4, 3)
+            # Collecting new dataset every 5 seconds, 4 points a second,
+            # 4 decimal places..
+            isCollecting = controller.collectData(5, 4, 4)
 
             controller.writerAction().closeWriter()
 

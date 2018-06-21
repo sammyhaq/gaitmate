@@ -9,6 +9,7 @@ The functionality of this program is shown in loadFileTester.py
 """
 import math
 import numpy as np
+import os
 
 class LoadFileHelper():
 
@@ -51,6 +52,12 @@ class LoadFileHelper():
         while (len(self.y) > len(self.z)):
             self.y.pop()
 
+    # returns true if the file is blank. Good for catching files that were touched but not saved.
+    def isBlank(self):
+        if (os.stat(self.filename).st_size == 0):
+            return True
+        else:
+            return False
         
     # Returns the x data as a list of floats.
     def getData_X(self):
