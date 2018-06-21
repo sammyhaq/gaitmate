@@ -21,21 +21,32 @@ class Clusterer:
     
         self.results = KMeans(n_clusters=3, random_state=0).fit(np.array(self.rawVariance))
 
-def main():
-    print("Gathering files:")
+def ClusterInterface():
+    print("\n####################")
+    print("# Gathering files: #")
+    print("####################\n")
+
     print("\tpulling from 'logs/walkingData..'")
     walkingFileList = os.listdir("logs/walkingData")
+    print("\t\t"+str(len(walkingFileList))+" data points found.")
     print("\t\t..done.")
+    
     print("\tpulling from 'logs/standingData..'")
     standingFileList = os.listdir("logs/standingData")
+    print("\t\t"+str(len(standingFileList))+" data points found.")
     print("\t\t..done.")
+    
     print("\tpulling from 'logs/shufflingData..'")
     shufflingFileList = os.listdir("logs/shufflingData")
+    print("\t\t"+str(len(shufflingFileList))+" data points found.")
     print("\t\t..done.")
+
     print("\t..done.")
 
     fileList = []
-    print("Appending file lists together..")
+    print("\n###################################")
+    print("# Appending file lists together.. #")
+    print("###################################\n")
     for i in range(len(walkingFileList)):
         fileList.append("logs/walkingData/" + walkingFileList[i])
     for i in range(len(standingFileList)):
@@ -44,22 +55,42 @@ def main():
         fileList.append("logs/shufflingData/" + shufflingFileList[i])
     print("\t..done.\n")
 
-    for i in range(len(fileList)):
-        print(fileList[i] + "\n")
-    print("Amount of points: " + str(len(fileList)) + "\n")
+    print("Total amount of data points: " + str(len(fileList)) + "\n")
 
-    print("Attempting to cluster..")
+    print("\n###########################")
+    print("# Attempting to cluster.. #")
+    print("###########################\n")
     clusterer = Clusterer(fileList)
     print("\t..done.\n")
 
-    print("Printing results:")
-    print("\tWalking Data labels:")
-    print("\t\t" + str(clusterer.results.labels_[:len(walkingFileList)]))
-    print("\tStanding Data labels:")
-    print("\t\t" + str(clusterer.results.labels_[len(walkingFileList):(len(standingFileList)+len(walkingFileList)-1)]))
-    print("\tShuffling Data labels:")
-    print("\t\t" + str(clusterer.results.labels_[len(standingFileList)+len(walkingFileList):]))
+    print("\n#####################")
+    print("# Printing results: #")
+    print("#####################\n")
+    
+    print("\n\t************************")
+    print("\t* Walking Data labels: *")
+    print("\t************************\n")
+    print("\t\tData#\tFilename\tLabel")
+    print("\t\t-----------------------------")
+    for i in range(len(walkingFileList)):
+        print("\t\t" + str(i+1) + "\t" + walkingFileList[i] + "\t" + str(clusterer.results.labels_[i]))
+    
+    print("\n\t*************************")
+    print("\t* Standing Data labels: *")
+    print("\t*************************\n")
+    print("\t\tData#\tFilename\tLabel") 
+    print("\t\t-----------------------------")
+    for i in range(len(standingFileList)):
+        print("\t\t" + str(i+1) + "\t" + standingFileList[i] + "\t" + str(clusterer.results.labels_[i + len(walkingFileList)]))
+    
+    print("\n\t**************************")
+    print("\t* Shuffling Data labels: *")
+    print("\t**************************\n")
+    print("\t\tData#\tFilename\tLabel")
+    print("\t\t-----------------------------")
+    for i in range(len(shufflingFileList)):
+        print("\t\t" + str(i+1) + "\t" + shufflingFileList[i] + "\t" + str(clusterer.results.labels_[i + len(walkingFileList) + len(shufflingFileList) - 1]))
 
-main()
+ClusterInterface()
 
 
