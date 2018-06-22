@@ -6,6 +6,7 @@ import os
 import sys
 from enum import Enum
 
+
 class Clusterer:
 
     def __init__(self, filenames):
@@ -27,7 +28,8 @@ class Clusterer:
                            loader.getDataVariance_Z()])
 
     def doKMeansCluster(self):
-        return KMeans(n_clusters=3, random_state=0).fit(np.array(self.X), np.array(self.Y))
+        return KMeans(n_clusters=3,
+                      random_state=0).fit(np.array(self.X), np.array(self.Y))
 
     def trainSVC(self):
 
@@ -37,16 +39,19 @@ class Clusterer:
     def predictSVC(self, feature):
         return str(self.clf.predict(feature).item(0))
 
+
 def runOptions():
     print("\n\t************************")
     print("\t* Run Options (--help) *")
     print("\t************************\n")
     print("\t'python " + str(sys.argv[0]) +
-            "'\t\t\tDefault. Runs both KMeans and SVC Cluster and shows results.")
-    print("\t'python " + str(sys.argv[0]) +" SVC'" +
-        "\t\tRuns the SVC Test only.")
-    print("\t'python " + str(sys.argv[0]) +" KMeans'" +
-        "\t\tRuns the KMeans Test only.")
+          "'\t\t\tDefault. Runs both KMeans " +
+          "and SVC Cluster and shows results.")
+    print("\t'python " + str(sys.argv[0]) + " SVC'" +
+          "\t\tRuns the SVC Test only.")
+    print("\t'python " + str(sys.argv[0]) + " KMeans'" +
+          "\t\tRuns the KMeans Test only.")
+
 
 def execute():
 
@@ -62,12 +67,15 @@ def execute():
     if (len(sys.argv) == 1):
         runSVC = True
         runKMeans = True
-    if ("--help" in sys.argv):
+    elif ("--help" in sys.argv):
         runOptions()
         sys.exit()
-    if ("SVC" in sys.argv):
+    elif ("SVC" in sys.argv):
         runSVC = True
-    if ("KMeans" in sys.argv):
+    elif ("KMeans" in sys.argv):
+        runKMeans = True
+    elif ("KMeans" in sys.argv and "SVC" in sys.argv):
+        runSVC = True
         runKMeans = True
     else:
         print("\tInvalid execution / command line arguments.")
@@ -164,15 +172,13 @@ def execute():
     for i in range(len(shufflingFileList)):
         try:
             print("\t\t" + str(i+1) + "\t" +
-                  shufflingFileList[i] + "\t" +
-                  str(kMeansResults.labels_[i +
-                      len(walkingFileList) +
-                      len(shufflingFileList) - 2]))
+              shufflingFileList[i] + "\t" +
+              str(kMeansResults.labels_[i +
+                  len(walkingFileList) +
+                  len(standingFileList) - 2]))
         except IndexError:
-            print("Index at: " + str(i))
-            print(str(kMeansResults.labels_.size()))
-            raise
-
+            print("Length of Labels array: " + str(len(kMeansResults.labels_)))
+            print(i + len(walkingFileList) + len(shufflingFileList) - 2)
     if (runSVC): 
         print("\n#########################")
         print("# Printing SVC Results: #")
