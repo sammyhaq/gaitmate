@@ -144,6 +144,13 @@ def execute():
     clusterer = Clusterer(fileList)
     print("\t..done.\n")
 
+    for i in range(len(walkingFileList)):
+        clusterer.Y.append("walking")
+    for i in range(len(standingFileList)):
+        clusterer.Y.append("standing")
+    for i in range(len(shufflingFileList)):
+        clusterer.Y.append("shuffling")
+
     if (runKMeans):
 
         kMeansResults = clusterer.doKMeansCluster()
@@ -189,41 +196,53 @@ def execute():
         print("# Printing SVC Results: #")
         print("#########################\n")
 
-        for i in range(len(walkingFileList)):
-            clusterer.Y.append("walking")
-        for i in range(len(standingFileList)):
-            clusterer.Y.append("standing")
-        for i in range(len(shufflingFileList)):
-            clusterer.Y.append("shuffling")
-
         clusterer.trainSVC()
 
         walkingTestFileList = os.listdir("logs/testData/walkingData")
         standingTestFileList = os.listdir("logs/testData/standingData")
         shufflingTestFileList = os.listdir("logs/testData/shufflingData")
+        foundBlankFiles = False
 
         walkingTestData = []
-        for file in range(len(walkingTestFileList)):
+        for i in range(len(walkingTestFileList)):
             loader = LoadFileHelper.LoadFileHelper(
                     "logs/testData/walkingData/"+walkingTestFileList[i])
 
             # Checking to see if file was incorrectly saved, before parsing.
             # Prevents blank files from being parsed and ruining clustering.
-            if (loader.isBlank()):
+            if (loader.isBlank()): 
+                foundBlankFiles = True
+                print("\t'" + walkingTestFileList[i] + "' found to be blank/corrupted!")
+                print("\t\tmoving to " + "'logs/blank" + walkingTestFileList[i] + "'..")
+                os.rename(walkingTestFileList[i], "logs/blank" + walkingTestFileList[i])
+                print("\t\t\t..done.\n")
                 continue
             else:
                 loader.parseData()  # parsing data
+
+            walkingTestData.append([loader.getDataVariance_X(),
+                           loader.getDataVariance_Y(),
+                           loader.getDataVariance_Z()])
+
+        if (foundBlankFiles):
+            print("\tFound corrupted files, moved all offenders to" +
+                  " 'logs/blanklogs/' -- please rerun script!\n")
+            sys.exit()
 
             walkingTestData.append([loader.getDataVariance_X(),
                                     loader.getDataVariance_Y(),
                                     loader.getDataVariance_Z()])
 
         standingTestData = []
-        for file in range(len(standingTestFileList)):
+        for i in range(len(standingTestFileList)):
             loader = LoadFileHelper.LoadFileHelper(
                     "logs/testData/standingData/"+standingTestFileList[i])
 
             if (loader.isBlank()):
+                print("\t'" + standingTestFileList[i] + "' found to be blank/corrupted!")
+                print("\t\tmoving to " + "'logs/blank" + standingTestFileList[i] + "'..")
+                os.rename(standingTestFileList[i], "logs/blank" + standingTestFileList[i])
+                print("\t\t\t..done.\n")
                 continue
             else:
                 loader.parseData()  # parsing data
@@ -233,16 +252,20 @@ def execute():
                                      loader.getDataVariance_Z()])
 
         shufflingTestData = []
-        for file in range(len(shufflingTestFileList)):
+        for i in range(len(shufflingTestFileList)):
             loader = LoadFileHelper.LoadFileHelper(
                     "logs/testData/shufflingData/"+shufflingTestFileList[i])
 
             if (loader.isBlank()):
+                print("\t'" + shufflingTestFileList[i] + "' found to be blank/corrupted!")
+                print("\t\tmoving to " + "'logs/blank" + shufflingTestFileList[i] + "'..")
+                os.rename(shufflingTestFileList[i], "logs/blank" + shufflingTestFileList[i])
+                print("\t\t\t..done.\n")
                 continue
             else:
                 loader.parseData()  # parsing data
 
-            standingTestData.append([loader.getDataVariance_X(),
+            shufflingTestData.append([loader.getDataVariance_X(),
                                      loader.getDataVariance_Y(),
                                      loader.getDataVariance_Z()])
 
@@ -254,7 +277,7 @@ def execute():
         for i in range(len(walkingTestFileList)):
             print("\t\t" + str(i+1) + "\t" +
                   walkingTestFileList[i] + "\t" +
-                  str(clusterer.predictSVC(walkingTestData[i])))
+                  str(clusterer.predictSVC([walkingTestData[i]])))
 
         print("\n\t******************************")
         print("\t* Standing Test Data Results *")
@@ -264,7 +287,7 @@ def execute():
         for i in range(len(standingTestFileList)):
             print("\t\t" + str(i+1) + "\t" +
                   standingTestFileList[i] + "\t" +
-                  str(clusterer.predictSVC(standingTestData[i])))
+                  str(clusterer.predictSVC([standingTestData[i]])))
 
         print("\n\t*******************************")
         print("\t* Shuffling Test Data Results *")
@@ -274,7 +297,7 @@ def execute():
         for i in range(len(shufflingTestFileList)):
             print("\t\t" + str(i+1) + "\t" +
                   shufflingTestFileList[i] + "\t" +
-                  str(clusterer.predictSVC(standingTestData[i])))
+                  str(clusterer.predictSVC([shufflingTestData[i]])))
 
 
 execute()
