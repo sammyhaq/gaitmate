@@ -11,14 +11,20 @@ class Clusterer:
 
     def __init__(self, filenames):
         self.X = []
-        self.Y = ["Shuffling", "Standing", "Walking"]
+        self.Y = []
+        foundBlankFiles = False
 
         for i in range(len(filenames)):
             loader = LoadFileHelper.LoadFileHelper(filenames[i])
 
             # Checking to see if file was incorrectly saved, before parsing.
             # Prevents blank files from being parsed and ruining clustering.
-            if (loader.isBlank()):
+            if (loader.isBlank()): 
+                foundBlankFiles = True
+                print("\t'" + filenames[i] + "' found to be blank/corrupted!")
+                print("\t\tmoving to " + "'logs/blank" + filenames[i] + "'..")
+                os.rename(filenames[i], "logs/blank" + filenames[i])
+                print("\t\t\t..done.\n")
                 continue
             else:
                 loader.parseData()  # parsing data
@@ -27,12 +33,17 @@ class Clusterer:
                            loader.getDataVariance_Y(),
                            loader.getDataVariance_Z()])
 
+        if (foundBlankFiles):
+            print("\tFound corrupted files, moved all offenders to" +
+                  " 'logs/blanklogs/' -- please rerun script!\n")
+            sys.exit()
+
     def doKMeansCluster(self):
         return KMeans(n_clusters=3,
                       random_state=0).fit(np.array(self.X), np.array(self.Y))
 
     def trainSVC(self):
-
+        
         self.clf = svm.SVC()
         self.clf.fit(self.X, self.Y)
 
@@ -162,28 +173,29 @@ def execute():
                   str(kMeansResults.labels_[i +
                       len(walkingFileList)]))
 
-
-
         print("\n\t**************************")
         print("\t* Shuffling Data labels: *")
         print("\t**************************\n")
         print("\t\tData#\tFilename\tLabel")
         print("\t\t-----------------------------")
-    for i in range(len(shufflingFileList)):
-        try:
+        for i in range(len(shufflingFileList)):
             print("\t\t" + str(i+1) + "\t" +
-              shufflingFileList[i] + "\t" +
-              str(kMeansResults.labels_[i +
-                  len(walkingFileList) +
-                  len(standingFileList) - 2]))
-        except IndexError:
-            print("Length of Labels array: " + str(len(kMeansResults.labels_)))
-            print(i + len(walkingFileList) + len(shufflingFileList) - 2)
-    if (runSVC): 
+                  shufflingFileList[i] + "\t" +
+                  str(kMeansResults.labels_[i +
+                      len(walkingFileList) +
+                      len(standingFileList) - 2]))
+    if (runSVC):
         print("\n#########################")
         print("# Printing SVC Results: #")
         print("#########################\n")
-        
+
+        for i in range(len(walkingFileList)):
+            clusterer.Y.append("walking")
+        for i in range(len(standingFileList)):
+            clusterer.Y.append("standing")
+        for i in range(len(shufflingFileList)):
+            clusterer.Y.append("shuffling")
+
         clusterer.trainSVC()
 
         walkingTestFileList = os.listdir("logs/testData/walkingData")
