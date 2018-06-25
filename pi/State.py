@@ -45,8 +45,8 @@ class State:
     #
     # Constructor.
     #
-    def __init__(self):
-        self.currentState = StateType.WALKING  # Initial State is Walking.
+    def __init__(self, currentState=StateType.WALKING):
+        self.currentState = currentState  # Initial State is Walking.
 
     # Gets the type of the State.
     def getCurrentState(self):
@@ -82,22 +82,12 @@ class State:
     #
     # Functions to change the type of the current state.
     #
-    def changeToWalkingState(self):
-        self.currentState = StateType.WALKING
-
-    def changeToVibratingState(self):
-        self.currentState = StateType.VIBRATING
-
-    def changeToRecoveryState(self):
-        self.currentState = StateType.RECOVERING
-
-    def changeToPausedState(self):
-        self.currentState = StateType.PAUSED
+    def changeState(self, stateType):
+        self.currentState = stateType
 
     #
     # Prints what state the system is currently in.
     #
-
     def printState(self):
         if (isWalking()):
             print("Walking State")

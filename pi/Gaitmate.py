@@ -11,8 +11,11 @@ something goes wrong.
 
 """
 
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.externals import joblib
+from sklearn.metrics import classification_report, confusion_matrix
 import sys
-import State as State
+import State
 import RPi.GPIO as GPIO
 import time
 import MPU6050
@@ -46,6 +49,8 @@ class Gaitmate:
         self.button = Button.Button(self.buttonPin)
         self.laser = OutputComponent.OutputComponent(self.laserPin)
         self.led = OutputComponent.OutputComponent(self.ledPin)
+        
+        self.clf = joblib.load('dTreeExport.pkl')
 
     # accessors, just to clean up code..
 
@@ -206,18 +211,92 @@ class Gaitmate:
             if (getState().isPaused()):
                 doPausedState()
 
+    #
     # Walking State driver code
+    #
     def doWalkingState(self):
-        return
+        time.sleep(0.5)
+        self.state.changeState(State.StateType.PAUSED)
+        self.ledAction().toggleOn()
 
+        if (self.checkWalking()):
+            # If walking okay, do walking state.
+            self.doWalkingState()
+        else:
+            # if walking badly, do vibrating state.
+            self.doVibratingState()
+
+    #
     # Vibrating State driver code
+    #
     def doVibratingState(self):
-        return
+        time.sleep(0.5)
+        self.state.changeState(State.StateType.VIBRATING)
+        self.ledAction().toggleOn()
+        self.hapticAction().metronome(0.375, 5)
 
+        if (self.checkWalking()):
+            # If walking okay, do walking state.
+            self.doWalkingState()
+        else:
+            # If walking badly, do recovery state.
+            self.doRecoveringState()
+
+    #
     # Recovery State driver code
+    #
     def doRecoveringState(self):
-        return
+        time.sleep(0.5)
+        self.state.changeState(State.StateType.RECOVERING)
+        self.ledAction().toggleOn()
+        self.laserAction().toggleOn()
+        self.hapticAction().metronome(0.375, 5)
+        self.buzzerAction().metronome(0.375, 5)
 
+        if (self.checkWalking()):
+            # If walking okay, do walking state.
+            self.doWalkingState()
+        else:
+            # If walking badly, do recovery state.
+            self.doRecoveringState()
+
+    #
     # Paused State driver code
-    def State(self):
-        return
+    #
+    def doPausedState(self):
+        time.sleep(3)
+        self.state.changeState(State.StateType.RECOVERING)
+        self.ledAction().toggleOff()
+        self.laserAction().toggleOff()
+        
+        while True:
+            time.sleep(0.5)
+            if (not buttonNotPressed):
+                self.doWalkingState()
+
+    def checkWalking(self):
+        # Collect Data for 5 seconds.
+        buttonNotPressed = self.collectData(5, 4, 4)
+        filename = self.writerAction.filename
+        self.writerAction.closeWriter()
+
+        # button not pressed returns true if the button wasn't pressed during
+        # collection.
+        if (buttonNotPressed):
+
+            # Checking to see if patient is walking okay.
+            loader = LoadFileHelper.LoadFileHelper(filename)
+            X = [loader.getDataVariance_X(),
+                 loader.getDataVariance_Y(),
+                 laoder.getDataVariance_Z()]
+
+            # If patient is walking correctly, return true.
+            if (str(self.clf.predict(np.array(X))) == "walking"):
+                return True
+            # If patient is not walking okay, return false.
+            else:
+                return False
+
+        # If button is pressed, change to paused state.
+        else:
+            self.doPausedState()

@@ -2,6 +2,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.externals import joblib
 import numpy as np
 import LoadFileHelper
 import matplotlib.pyplot as plt
@@ -129,6 +130,9 @@ def main():
     # Doing a Decision Tree with a train/test split of 90/10.
     learner.doDecisionTree(0.10)
     learner.showResults()
+
+    # Exporting trained tree as a pickle file
+    joblib.dump(learner.clf, 'dTreeExport.pkl')
 
 
 main()
