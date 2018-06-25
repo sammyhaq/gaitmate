@@ -42,6 +42,13 @@ from enum import Enum
 
 class State:
 
+
+    class StateType(Enum):
+        WALKING = 1
+        VIBRATING = 2
+        RECOVERING = 3
+        PAUSED = 4
+
     #
     # Constructor.
     #
@@ -56,25 +63,25 @@ class State:
     # Boolean functions. Returns true if State() is in respective state.
     #
     def isWalking(self):
-        if (self.currentState == StateType.WALKING):
+        if (self.currentState == self.StateType.WALKING):
             return True
         else:
             return False
 
     def isVibrating(self):
-        if (self.currentState == StateType.VIBRATING):
+        if (self.currentState == self.StateType.VIBRATING):
             return True
         else:
             return False
 
     def isRecovering(self):
-        if (self.currentState == StateType.RECOVERING):
+        if (self.currentState == self.StateType.RECOVERING):
             return True
         else:
             return False
 
     def isPaused(self):
-        if (self.currentState == StateType.PAUSED):
+        if (self.currentState == self.StateType.PAUSED):
             return True
         else:
             return False
@@ -97,10 +104,3 @@ class State:
             print("Recovery State")
         if (isPaused()):
             print("Paused State")
-
-
-class StateType(Enum):
-    WALKING = 1
-    VIBRATING = 2
-    RECOVERING = 3
-    PAUSED = 4

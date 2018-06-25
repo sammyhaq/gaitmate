@@ -23,7 +23,7 @@ import Button
 import SaveFileHelper
 import LoadFileHelper
 import OutputComponent
-
+import numpy as np
 
 class Gaitmate:
 
@@ -92,7 +92,7 @@ class Gaitmate:
         return self.gyroAddress
 
     def getState(self):
-        return self.State
+        return self.state
 
     # Collects Data for a certain period of time at a certain frequency.
     # Returns true if the button is not pressed. Returns false if the button is
@@ -199,24 +199,24 @@ class Gaitmate:
 
             time.sleep(0.5)
 
-            if (getState().isWalking()):
-                doWalkingState()
+            if (self.getState().isWalking()):
+                self.doWalkingState()
 
-            if (getState().isVibrating()):
-                doVibratingState()
+            if (self.getState().isVibrating()):
+                self.doVibratingState()
 
-            if (getState().isRecovering()):
-                doRecoveringState()
+            if (self.getState().isRecovering()):
+                self.doRecoveringState()
 
-            if (getState().isPaused()):
-                doPausedState()
+            if (self.getState().isPaused()):
+                self.doPausedState()
 
     #
     # Walking State driver code
     #
     def doWalkingState(self):
         time.sleep(0.5)
-        self.state.changeState(State.StateType.PAUSED)
+        self.state.changeState(self.state.StateType.PAUSED)
         self.ledAction().toggleOn()
 
         if (self.checkWalking()):
@@ -231,7 +231,7 @@ class Gaitmate:
     #
     def doVibratingState(self):
         time.sleep(0.5)
-        self.state.changeState(State.StateType.VIBRATING)
+        self.state.changeState(self.state.StateType.VIBRATING)
         self.ledAction().toggleOn()
         self.hapticAction().metronome(0.375, 5)
 
@@ -247,7 +247,7 @@ class Gaitmate:
     #
     def doRecoveringState(self):
         time.sleep(0.5)
-        self.state.changeState(State.StateType.RECOVERING)
+        self.state.changeState(self.state.StateType.RECOVERING)
         self.ledAction().toggleOn()
         self.laserAction().toggleOn()
         self.hapticAction().metronome(0.375, 5)
@@ -265,7 +265,7 @@ class Gaitmate:
     #
     def doPausedState(self):
         time.sleep(3)
-        self.state.changeState(State.StateType.RECOVERING)
+        self.state.changeState(self.state.StateType.PAUSED)
         self.ledAction().toggleOff()
         self.laserAction().toggleOff()
         
@@ -277,8 +277,8 @@ class Gaitmate:
     def checkWalking(self):
         # Collect Data for 5 seconds.
         buttonNotPressed = self.collectData(5, 4, 4)
-        filename = self.writerAction.filename
-        self.writerAction.closeWriter()
+        filename = self.writerAction().filename
+        self.writerAction().closeWriter()
 
         # button not pressed returns true if the button wasn't pressed during
         # collection.
@@ -286,9 +286,10 @@ class Gaitmate:
 
             # Checking to see if patient is walking okay.
             loader = LoadFileHelper.LoadFileHelper(filename)
+            loader.parseData()
             X = [loader.getDataVariance_X(),
                  loader.getDataVariance_Y(),
-                 laoder.getDataVariance_Z()]
+                 loader.getDataVariance_Z()]
 
             # If patient is walking correctly, return true.
             if (str(self.clf.predict(np.array(X))) == "walking"):
