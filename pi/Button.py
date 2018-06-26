@@ -26,7 +26,7 @@ class Button:
         pressed = (GPIO.input(self.pin))
 
         if (pressed):
-            print("Button pressed!")
+            print("\t\t** Button pressed! **")
             return True
         else:
             return False

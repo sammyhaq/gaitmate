@@ -25,6 +25,7 @@ import LoadFileHelper
 import OutputComponent
 import numpy as np
 from multiprocessing import Process, Pipe
+from HaqPyTools import UI
 
 class Gaitmate:
 
@@ -215,7 +216,7 @@ class Gaitmate:
     # Walking State driver code
     #
     def doWalkingState(self):
-        print("\nEntering Walking State")
+        UI.box(["Entering Walking State"])
         time.sleep(0.5)
         self.state.changeState(self.state.StateType.PAUSED)
         self.ledAction().toggleOn()
@@ -235,7 +236,7 @@ class Gaitmate:
     # Vibrating State driver code
     #
     def doVibratingState(self):
-        print("\nEntering Vibrating State")
+        UI.box(["Entering Vibrating State"])
         time.sleep(0.5)
         self.state.changeState(self.state.StateType.VIBRATING)
         self.ledAction().toggleOn()
@@ -261,7 +262,7 @@ class Gaitmate:
     # Recovery State driver code
     #
     def doRecoveringState(self):
-        print("\nEntering Recovering State")
+        UI.box(["Entering Recovering State"])
         self.state.changeState(self.state.StateType.RECOVERING)
         self.ledAction().toggleOn()
         self.laserAction().toggleOn()
@@ -289,7 +290,7 @@ class Gaitmate:
     # Paused State driver code
     #
     def doPausedState(self):
-        print("\nEntering Paused State")
+        UI.box(["Entering Paused State"])
         time.sleep(3)
         self.state.changeState(self.state.StateType.PAUSED)
         self.ledAction().toggleOff()
@@ -338,5 +339,5 @@ class Gaitmate:
 
         # If button is pressed, change to paused state.
         else:
-            print("\t\tButton pressed during collection, changint to paused state")
+            print("\t\tButton pressed during collection, changing to paused state")
             self.doPausedState()
