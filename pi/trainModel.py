@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 trainModel_main.py
 Code by Sammy Haq

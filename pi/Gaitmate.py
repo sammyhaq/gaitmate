@@ -24,12 +24,12 @@ import SaveFileHelper
 import LoadFileHelper
 import OutputComponent
 import numpy as np
+from multiprocessing import Process, Pipe
 
 class Gaitmate:
 
     def __init__(self,
-                 gyroAddress,
-                 buzzerPin,
+                 gyroAddress, buzzerPin,
                  hapticPin,
                  buttonPin,
                  laserPin,
@@ -50,7 +50,7 @@ class Gaitmate:
         self.laser = OutputComponent.OutputComponent(self.laserPin)
         self.led = OutputComponent.OutputComponent(self.ledPin)
         
-        self.clf = joblib.load('dTreeExport.pkl')
+        self.clf = joblib.load('/home/pi/gaitmate/pi/dTreeExport.pkl')
 
     # accessors, just to clean up code..
 
@@ -215,11 +215,16 @@ class Gaitmate:
     # Walking State driver code
     #
     def doWalkingState(self):
+        print("\nEntering Walking State")
         time.sleep(0.5)
         self.state.changeState(self.state.StateType.PAUSED)
         self.ledAction().toggleOn()
+        
+        recv_end, send_end = Pipe(False)
 
-        if (self.checkWalking()):
+        self.checkWalking(send_end)
+
+        if (recv_end.recv()):
             # If walking okay, do walking state.
             self.doWalkingState()
         else:
@@ -230,12 +235,22 @@ class Gaitmate:
     # Vibrating State driver code
     #
     def doVibratingState(self):
+        print("\nEntering Vibrating State")
         time.sleep(0.5)
         self.state.changeState(self.state.StateType.VIBRATING)
         self.ledAction().toggleOn()
-        self.hapticAction().metronome(0.375, 5)
 
-        if (self.checkWalking()):
+        recv_end, send_end = Pipe(False)
+
+        p1 = Process(target=self.hapticAction().metronome, args=(0.375, 5))
+        p1.start()
+        p2 = Process(target=self.checkWalking, args=(send_end,))
+        p2.start()
+
+        p1.join()
+        p2.join()
+
+        if (recv_end.recv()):
             # If walking okay, do walking state.
             self.doWalkingState()
         else:
@@ -246,14 +261,24 @@ class Gaitmate:
     # Recovery State driver code
     #
     def doRecoveringState(self):
-        time.sleep(0.5)
+        print("\nEntering Recovering State")
         self.state.changeState(self.state.StateType.RECOVERING)
         self.ledAction().toggleOn()
         self.laserAction().toggleOn()
-        self.hapticAction().metronome(0.375, 5)
-        self.buzzerAction().metronome(0.375, 5)
+        
+        recv_end, send_end = Pipe(False)
+        p1 = Process(target=self.hapticAction().metronome, args=(0.375, 5))
+        p1.start()
+        p2 = Process(target=self.buzzerAction().metronome, args=(0.375, 5))
+        p2.start()
+        p3 = Process(target=self.checkWalking, args=(send_end,))
+        p3.start()
+        
+        p1.join()
+        p2.join()
+        p3.join()
 
-        if (self.checkWalking()):
+        if (recv_end.recv()):
             # If walking okay, do walking state.
             self.doWalkingState()
         else:
@@ -264,17 +289,25 @@ class Gaitmate:
     # Paused State driver code
     #
     def doPausedState(self):
+        print("\nEntering Paused State")
         time.sleep(3)
         self.state.changeState(self.state.StateType.PAUSED)
         self.ledAction().toggleOff()
         self.laserAction().toggleOff()
+
+
+        buttonNotPressed = self.collectData(5,4,4)
         
         while True:
             time.sleep(0.5)
             if (not buttonNotPressed):
                 self.doWalkingState()
+            else:
+                buttonNotPressed = self.collectData(5,4,4)
 
-    def checkWalking(self):
+    def checkWalking(self, send_end):
+        print("\tChecking walking..")
+        
         # Collect Data for 5 seconds.
         buttonNotPressed = self.collectData(5, 4, 4)
         filename = self.writerAction().filename
@@ -283,21 +316,27 @@ class Gaitmate:
         # button not pressed returns true if the button wasn't pressed during
         # collection.
         if (buttonNotPressed):
-
+            print("\t\tButton not pressed during collection, checking to see if patient is walking okay")
+            
             # Checking to see if patient is walking okay.
             loader = LoadFileHelper.LoadFileHelper(filename)
             loader.parseData()
             X = [loader.getDataVariance_X(),
                  loader.getDataVariance_Y(),
                  loader.getDataVariance_Z()]
-
+            
             # If patient is walking correctly, return true.
-            if (str(self.clf.predict(np.array(X))) == "walking"):
+            if (str(self.clf.predict(np.array(X).reshape(1, -1))) == "walking"):
+                print("\t\tpatient is walking correctly, returning True")
+                send_end.send(True)
                 return True
             # If patient is not walking okay, return false.
             else:
+                print("\t\tpatient is not walking correctly, returning False")
+                send_end.send(False)
                 return False
 
         # If button is pressed, change to paused state.
         else:
+            print("\t\tButton pressed during collection, changint to paused state")
             self.doPausedState()
