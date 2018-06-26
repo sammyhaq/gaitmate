@@ -52,6 +52,7 @@ class Gaitmate:
         self.led = OutputComponent.OutputComponent(self.ledPin)
         
         self.clf = joblib.load('/home/pi/gaitmate/pi/dTreeExport.pkl')
+        self.predictedResult = None
 
     # accessors, just to clean up code..
 
@@ -110,7 +111,7 @@ class Gaitmate:
         # Initializing write file to have the name of the local time and date.
         fileName = time.strftime(
             "/home/pi/gaitmate/pi/logs/%m-%d-%y_%H%M%S", time.localtime())
-        print("Creating " + fileName + "..")
+        # print("Creating " + fileName + "..")
 
         self.writer = SaveFileHelper.SaveFileHelper(fileName)
 
@@ -132,7 +133,7 @@ class Gaitmate:
 
             time.sleep(delay)
 
-        print("Saving and creating a new filename..")
+        # print("Saving and creating a new filename..")
         self.writerAction().dumpBuffer()
         return True
 
@@ -307,7 +308,7 @@ class Gaitmate:
                 buttonNotPressed = self.collectData(5,4,4)
 
     def checkWalking(self, send_end):
-        print("\tChecking walking..")
+        print("\tChecking gait..")
         
         # Collect Data for 5 seconds.
         buttonNotPressed = self.collectData(5, 4, 4)
@@ -317,7 +318,6 @@ class Gaitmate:
         # button not pressed returns true if the button wasn't pressed during
         # collection.
         if (buttonNotPressed):
-            print("\t\tButton not pressed during collection, checking to see if patient is walking okay")
             
             # Checking to see if patient is walking okay.
             loader = LoadFileHelper.LoadFileHelper(filename)
@@ -325,19 +325,19 @@ class Gaitmate:
             X = [loader.getDataVariance_X(),
                  loader.getDataVariance_Y(),
                  loader.getDataVariance_Z()]
-            
+
+
+            self.predictedResult= self.clf.predict(np.array(X).reshape(1, -1))[0]
+
             # If patient is walking correctly, return true.
-            if (str(self.clf.predict(np.array(X).reshape(1, -1))) == "walking"):
-                print("\t\tpatient is walking correctly, returning True")
+            if (self.predictedResult == "walking"):
                 send_end.send(True)
                 return True
             # If patient is not walking okay, return false.
             else:
-                print("\t\tpatient is not walking correctly, returning False")
                 send_end.send(False)
                 return False
 
         # If button is pressed, change to paused state.
         else:
-            print("\t\tButton pressed during collection, changing to paused state")
             self.doPausedState()
