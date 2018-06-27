@@ -7,7 +7,7 @@ import Button
 def main():
 
     GPIO.setwarnings(False);
-    print("Resetting all pins..")
+    print("\nResetting all pins..")
 
     gyroAddress = 0x68
     buzzerPin = 17
@@ -32,6 +32,6 @@ def main():
     led = OutputComponent.OutputComponent(ledPin)
 
     GPIO.cleanup()
-    print("  ..done.");
+    print("\t..done.\n");
 
 main()
