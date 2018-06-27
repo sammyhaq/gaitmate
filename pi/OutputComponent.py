@@ -1,4 +1,5 @@
 """
+
 OutputComponent.py
 Code by Sammy Haq
 https://github.com/sammyhaq
@@ -23,13 +24,17 @@ class OutputComponent:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.OUT)
 
-#        self.pulse = GPIO.PWM(self.pin, 1000);
-#        self.pulse.start(0);
+        self.pulse = GPIO.PWM(self.pin, 100)
+        self.pulse.start(0)
 
     def toggleOn(self):
+        self.pulse.stop()
+        time.sleep(0.1)
         GPIO.output(self.pin, GPIO.HIGH)
 
     def toggleOff(self):
+        self.pulse.stop()
+        time.sleep(0.1)
         GPIO.output(self.pin, GPIO.LOW)
 
     # Vibrates/Sounds the device for a length of time (sec).
@@ -47,16 +52,6 @@ class OutputComponent:
 
         while (time.time() < timerEnd):
             self.step(delay)
-
-    def breathe(self):
-        while True:
-            for dutyCycle in range(0, 101, 4):
-                self.pulse.ChangeDutyCycle(dutyCycle)
-                sleep(0.05)
-            for dutyCycle in reversed(range(0, 101, 4)):
-                self.pulse.ChangeDutyCycle(dutyCycle)
-                sleep(0.05)
-        sleep(1)
 
     def __destroy__(self):
         self.pulse.stop()
