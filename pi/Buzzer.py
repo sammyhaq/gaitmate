@@ -6,21 +6,19 @@ class Buzzer(OutputComponent):
     def __init__(self, pin):
         OutputComponent.__init__(self, pin)
 
-    def tone(self, pitch, duration=0.25):
-        if (pitch == 0):
+        self.pulse = GPIO.PWM(self.pin, 440)
+        self.pulse.start(50)
+
+    def tone(self, frequency, duration=0.25):
+        if (frequency == 0):
+            self.pulse.stop()
             time.sleep(duration)
             return
 
         else:
-            period = 1.0 / pitch
-            delay = period / 2
-            cycles = int(duration * pitch)
-
-            for i in range(cycles):
-                GPIO.output(self.pin, GPIO.HIGH)
-                time.sleep(delay)
-                GPIO.output(self.pin, GPIO.LOW)
-                time.sleep(delay)
+            self.pulse.start(50)
+            self.pulse.ChangeFrequency(frequency)
+            time.sleep(duration)
 
     def test(self):
         pitches = [262, 330, 392, 523, 1047]
@@ -28,4 +26,5 @@ class Buzzer(OutputComponent):
 
         for i in range(len(pitches)):
             self.tone(pitches[i], duration[i])
+            self.pulse.stop()
             time.sleep(duration[i] * 0.5)
