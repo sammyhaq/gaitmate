@@ -50,7 +50,7 @@ class Gaitmate:
         self.button = Button.Button(self.buttonPin)
         self.laser = OutputComponent.OutputComponent(self.laserPin)
         self.led = OutputComponent.OutputComponent(self.ledPin)
-        
+
         self.clf = joblib.load('/home/pi/gaitmate/pi/dTreeExport.pkl')
         self.predictedResult = None
 
