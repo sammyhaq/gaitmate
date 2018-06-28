@@ -26,6 +26,7 @@ class OutputComponent:
 
         self.pulse = GPIO.PWM(self.pin, 100)
         self.pulse.stop()
+        GPIO.output(self.pin, GPIO.LOW)
 
     def toggleOn(self):
         self.pulse.stop()
