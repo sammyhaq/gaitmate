@@ -69,6 +69,9 @@ class Learner:
     def addSampleFolder(self, folderpath, label):
         print("\tPulling from "+folderpath+"..")
         fileList = os.listdir(folderpath)
+       
+        # Removing folderpaths (like ignore/)
+        fileList.remove("ignore")
         print("\t\t"+str(len(fileList))+" data points found.")
         print("\t\t..done.")
 
