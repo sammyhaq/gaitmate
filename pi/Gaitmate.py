@@ -3,8 +3,7 @@ Gaitmate.py
 Code by Sammy Haq
 https://github.com/sammyhaq
 
-Class for pulling all of the libraries defined in this folder together.
-Contains everything, from the primary assignment of pins to creating a save 
+Class for pulling all of the libraries defined in this folder together.  Contains everything, from the primary assignment of pins to creating a save 
 buffer to save the data collected. Basically, this .py acts as the front end
 for all of the other code. This may be the first thing to try to edit if
 something goes wrong.
@@ -223,9 +222,9 @@ class Gaitmate:
         
         recv_end, send_end = Pipe(False)
 
-        self.checkWalking(send_end)
+        isWalkOk = self.checkWalking(send_end)
 
-        if (recv_end.recv()):
+        if (isWalkOk):
             # If walking okay, do walking state.
             self.doWalkingState()
         else:
@@ -243,7 +242,7 @@ class Gaitmate:
 
         recv_end, send_end = Pipe(False)
 
-        p1 = Process(target=self.hapticAction().metronome, args=(0.375, 5))
+        p1 = Process(target=self.hapticAction().metronome, args=(0.375, 3))
         p1.start()
         p2 = Process(target=self.checkWalking, args=(send_end,3))
         p2.start()

@@ -27,13 +27,14 @@ def main():
     try:
         while True:
             controller.ledAction().toggleOn()
-
+            print("Saving new file..")
             # Collecting new dataset every 5 seconds, 4 points a second,
             # 4 decimal places..
             isCollecting = controller.collectData(5, 4, 4)
 
+            print("\tClosing writer..")
             controller.writerAction().closeWriter()
-
+            print("\t\t..done.")
             if (isCollecting):
                 continue
             else:
