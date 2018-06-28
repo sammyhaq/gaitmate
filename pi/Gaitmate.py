@@ -15,14 +15,16 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.externals import joblib
 from sklearn.metrics import classification_report, confusion_matrix
 import sys
-import State
+from State import State
 import RPi.GPIO as GPIO
 import time
-import MPU6050
-import Button
-import SaveFileHelper
-import LoadFileHelper
-import OutputComponent
+from MPU6050 import MPU6050
+from Button import Button
+from SaveFileHelper import SaveFileHelper
+from LoadFileHelper import LoadFileHelper
+from OutputComponent import OutputComponent
+from LED import LED
+from Buzzer import Buzzer
 import numpy as np
 from multiprocessing import Process, Pipe
 from HaqPyTools import UI
@@ -43,13 +45,13 @@ class Gaitmate:
         self.laserPin = laserPin
         self.ledPin = ledPin
 
-        self.state = State.State()
-        self.gyro = MPU6050.MPU6050(self.gyroAddress)
-        self.buzzer = OutputComponent.OutputComponent(self.buzzerPin)
-        self.haptic = OutputComponent.OutputComponent(self.hapticPin)
-        self.button = Button.Button(self.buttonPin)
-        self.laser = OutputComponent.OutputComponent(self.laserPin)
-        self.led = OutputComponent.OutputComponent(self.ledPin)
+        self.state = State(State.StateType.PAUSED)
+        self.gyro = MPU6050(self.gyroAddress)
+        self.buzzer = Buzzer(self.buzzerPin)
+        self.haptic = OutputComponent(self.hapticPin)
+        self.button = Button(self.buttonPin)
+        self.laser = OutputComponent(self.laserPin)
+        self.led = LED(self.ledPin)
 
         self.clf = joblib.load('/home/pi/gaitmate/pi/dTreeExport.pkl')
         self.predictedResult = None
@@ -113,7 +115,7 @@ class Gaitmate:
             "/home/pi/gaitmate/pi/logs/%m-%d-%y_%H%M%S", time.localtime())
         # print("Creating " + fileName + "..")
 
-        self.writer = SaveFileHelper.SaveFileHelper(fileName)
+        self.writer = SaveFileHelper(fileName)
 
         timerEnd = time.time() + duration
         delay = 1.0/float(collectionFrequency)
@@ -127,7 +129,6 @@ class Gaitmate:
             # Code that stops script when button is pressed.
             if (self.buttonAction().isPressed()):
                 self.ledAction().toggleOff()
-                time.sleep(3)
                 self.writerAction().dumpBuffer()
                 return False
 
@@ -199,8 +200,6 @@ class Gaitmate:
     def execute(self):
         while True:
 
-            time.sleep(0.5)
-
             if (self.getState().isWalking()):
                 self.doWalkingState()
 
@@ -219,7 +218,7 @@ class Gaitmate:
     def doWalkingState(self):
         UI.box(["Entering Walking State"])
         time.sleep(0.5)
-        self.state.changeState(self.state.StateType.PAUSED)
+        self.state.changeState(self.state.StateType.WALKING)
         self.ledAction().toggleOn()
         
         recv_end, send_end = Pipe(False)
@@ -246,7 +245,7 @@ class Gaitmate:
 
         p1 = Process(target=self.hapticAction().metronome, args=(0.375, 5))
         p1.start()
-        p2 = Process(target=self.checkWalking, args=(send_end,))
+        p2 = Process(target=self.checkWalking, args=(send_end,3))
         p2.start()
 
         p1.join()
@@ -297,21 +296,21 @@ class Gaitmate:
         self.ledAction().toggleOff()
         self.laserAction().toggleOff()
 
-
-        buttonNotPressed = self.collectData(5,4,4)
+        # button checking time reduced because data collection is discarded here. Only important thing is button press boolean
+        buttonNotPressed = self.collectData(2,4,4)
         
         while True:
             time.sleep(0.5)
             if (not buttonNotPressed):
                 self.doWalkingState()
             else:
-                buttonNotPressed = self.collectData(5,4,4)
+                buttonNotPressed = self.collectData(2,4,4)
 
-    def checkWalking(self, send_end):
+    def checkWalking(self, send_end, duration=5):
         print("\tChecking gait..")
         
         # Collect Data for 5 seconds.
-        buttonNotPressed = self.collectData(5, 4, 4)
+        buttonNotPressed = self.collectData(duration, 4, 4)
         filename = self.writerAction().filename
         self.writerAction().closeWriter()
 
@@ -320,7 +319,7 @@ class Gaitmate:
         if (buttonNotPressed):
             
             # Checking to see if patient is walking okay.
-            loader = LoadFileHelper.LoadFileHelper(filename)
+            loader = LoadFileHelper(filename)
             loader.parseData()
             X = [loader.getDataVariance_X(),
                  loader.getDataVariance_Y(),

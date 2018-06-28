@@ -53,7 +53,7 @@ class State:
     # Constructor.
     #
     def __init__(self, currentState=StateType.WALKING):
-        self.currentState = currentState  # Initial State is Walking.
+        self.currentState = currentState  # Default State is walking.
 
     # Gets the type of the State.
     def getCurrentState(self):

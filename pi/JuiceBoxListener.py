@@ -24,6 +24,7 @@ class JuiceBoxListener:
         if (not controller.writerAction().isClosed()):
             controller.writerAction().closeWriter()
 
+        controller.ledAction().breathe(30, 0.005)
         os.system("sudo shutdown -h now")
 
 
