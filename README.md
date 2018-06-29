@@ -17,8 +17,7 @@ deterministic automata with 4 states: "walking", "vibrating", "recovering", and
 "paused." Details of each state are shown below:
 
  - *"Walking":* The system is currently checking if the patient's gait is normal
- or not. Current configuration checks to see if the patient makes 13 steps
- within 10 seconds. If the patient is successful, then the system will loop
+ or not. If the patient is deemed to be walking successfully, then the system will loop
  into the "walking" state again. If not, the system will go into the "vibrating"
  state.
 
@@ -32,7 +31,8 @@ deterministic automata with 4 states: "walking", "vibrating", "recovering", and
  vibration will play in tandem with a metronome at a suitable walking pace in
  the attempt to help the patient recover to a normal gait. This will continue
  until the patient is sensed to have returned to a normal walking pace, or until
- the button is pressed.
+ the button is pressed. If the button is not pressed, the system will go into
+ the "paused" state.
 
  - *"Paused"*: The paused state suspends all device functions. Everything turns off --
  lights, lasers, metronome, buzzer, etc. This can be reached from any mode at
@@ -40,7 +40,7 @@ deterministic automata with 4 states: "walking", "vibrating", "recovering", and
  the button is pressed again (this can be thought of as a pseudo-off state).
 
 ## Machine Learning Details
-This device uses `scikit-learn`'s implementation of Simple Decision Tree
+This device uses [`scikit-learn`](https://scikit-learn.org)'s implementation of Simple Decision Tree
 Learning, which is a supervised machine learning algorithm known for its simple
 yet effective classification methods. As machine learning algorithms are
 computationally intensive, the learning model is trained on a machine with a
