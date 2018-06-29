@@ -4,10 +4,11 @@ from multiprocessing import Pipe
 from HaqPyTools import UI
 import resetGPIO
 
+
 def main():
 
     UI.box(["Tester.py", "Code by Sammy Haq"])
-    
+
     resetGPIO
 
     controller = Gaitmate.Gaitmate(0x68, 17, 27, 6, 5, 25)
@@ -18,9 +19,10 @@ def main():
 
         print("\t\t\tcurrentState: " + controller.predictedResult)
 
-        if (controller.prevPredictedResult == None):
+        if (if controller.prevPredictedResult is None):
             print("\t\t\tpreviousState: None")
         else:
             print("\t\t\tpreviousState: " + controller.prevPredictedResult)
+
 
 main()

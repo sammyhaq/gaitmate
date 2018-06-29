@@ -4,9 +4,10 @@ from Component.MPU6050 import MPU6050
 from Component.OutputComponent import OutputComponent
 from Component.Button import Button
 
+
 def main():
 
-    GPIO.setwarnings(False);
+    GPIO.setwarnings(False)
     print("\nResetting all pins..")
 
     gyroAddress = 0x68
@@ -15,7 +16,7 @@ def main():
     buttonPin = 6
     laserPin = 5
     ledPin = 25
-    
+
     gyroAddress = gyroAddress
     buzzerPin = buzzerPin
     hapticPin = hapticPin
@@ -32,6 +33,7 @@ def main():
     led = OutputComponent(ledPin)
 
     GPIO.cleanup()
-    print("\t..done.\n");
+    print("\t..done.\n")
+
 
 main()

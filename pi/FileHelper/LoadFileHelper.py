@@ -11,6 +11,7 @@ import math
 import numpy as np
 import os
 
+
 class LoadFileHelper():
 
     # Constructor
@@ -38,27 +39,29 @@ class LoadFileHelper():
                 self.y.append(float(parsedLine[1]))
                 self.z.append(float(parsedLine[2]))
 
-                self.magnitude.append(math.sqrt(math.pow(float(parsedLine[0]), 2) +
-                    math.pow(float(parsedLine[1]), 2) +
-                    math.pow(float(parsedLine[2]), 2)))
+                self.magnitude.append(math.sqrt(
+                                      math.pow(float(parsedLine[0]), 2) +
+                                      math.pow(float(parsedLine[1]), 2) +
+                                      math.pow(float(parsedLine[2]), 2)))
             except ValueError:
                 continue
             except IndexError:
                 continue
-        
+
         # snipping rows.. (credit to https://github.com/rollinsjw)
         while (len(self.x) > len(self.z)):
             self.x.pop()
         while (len(self.y) > len(self.z)):
             self.y.pop()
 
-    # returns true if the file is blank. Good for catching files that were touched but not saved.
+    # returns true if the file is blank. Good for catching files that were
+    # touched but not saved.
     def isBlank(self):
         if (os.stat(self.filename).st_size == 0):
             return True
         else:
             return False
-        
+
     # Returns the x data as a list of floats.
     def getData_X(self):
         return self.x
@@ -100,7 +103,3 @@ class LoadFileHelper():
     # Returns the z data's variance.
     def getDataVariance_Z(self):
         return np.var(self.getData_Z())
-
-
-
-        

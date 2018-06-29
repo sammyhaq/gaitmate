@@ -1,3 +1,13 @@
+"""
+Buzzer.py
+Code by Sammy Haq
+https://github.com/sammyhaq
+
+Child class of OutputComponent that contains added Buzzer functions.
+
+"""
+
+
 from OutputComponent import OutputComponent
 import time
 import RPi.GPIO as GPIO

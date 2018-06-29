@@ -1,6 +1,18 @@
+"""
+JuiceBoxListener.py
+Code by Sammy Haq
+https://github.com/sammyhaq
+
+Code that listens to the GPIO to see if the battery on the Raspberry Pi is low.
+If it is, it triggers a callback function that safely shuts off the device.
+
+"""
+
+
 import RPi.GPIO as GPIO
 import os
 from HaqPyTools import UI
+
 
 class JuiceBoxListener:
 
@@ -14,7 +26,8 @@ class JuiceBoxListener:
 
         # adds a listener that keeps watching the battery pin. Triggers
         # lowBattery_callbackFunction if battery is low.
-        GPIO.add_event_detect(self.pin, GPIO.RISING, callback=self.lowBattery_callbackFunction)
+        GPIO.add_event_detect(self.pin, GPIO.RISING,
+                              callback=self.lowBattery_callbackFunction)
 
     # Triggers if the battery is low.
     def lowBattery_callbackFunction(self):

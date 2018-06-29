@@ -2,8 +2,8 @@
 trainModel_main.py
 Code by Sammy Haq
 
-Driver code for the system to just collect data, making a new file every 5 seconds.
-Takes 4 data points per second.
+Driver code for the system to just collect data, making a new file every 5
+seconds. Takes 4 data points per second.
 
 """
 

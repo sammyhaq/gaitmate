@@ -3,7 +3,8 @@ Gaitmate.py
 Code by Sammy Haq
 https://github.com/sammyhaq
 
-Class for pulling all of the libraries defined in this folder together.  Contains everything, from the primary assignment of pins to creating a save 
+Class for pulling all of the libraries defined in this folder together.
+Contains everything, from the primary assignment of pins to creating a save
 buffer to save the data collected. Basically, this .py acts as the front end
 for all of the other code. This may be the first thing to try to edit if
 something goes wrong.
@@ -53,7 +54,8 @@ class Gaitmate:
         self.laser = OutputComponent(self.laserPin)
         self.led = LED(self.ledPin)
 
-        self.clf = joblib.load('/home/pi/gaitmate/pi/MachineLearn/dTreeExport.pkl')
+        self.clf = joblib.load(
+            '/home/pi/gaitmate/pi/MachineLearn/dTreeExport.pkl')
         self.predictedResult = None
         self.prevPredictedResult = None
 
@@ -106,7 +108,7 @@ class Gaitmate:
     def collectData(self, duration, collectionFrequency, accuracy):
 
         if (collectionFrequency == 0):
-            collectionFrequency = 1  # default to 1 collection per second 
+            collectionFrequency = 1  # default to 1 collection per second
 
         if (duration == 0):
             return
@@ -221,7 +223,7 @@ class Gaitmate:
         time.sleep(0.5)
         self.state.changeState(self.state.StateType.WALKING)
         self.ledAction().toggleOn()
-        
+
         recv_end, send_end = Pipe(False)
 
         isWalkOk = self.checkWalking(send_end)
@@ -246,7 +248,7 @@ class Gaitmate:
 
         p1 = Process(target=self.hapticAction().metronome, args=(0.375, 3))
         p1.start()
-        p2 = Process(target=self.checkWalking, args=(send_end,3))
+        p2 = Process(target=self.checkWalking, args=(send_end, 3))
         p2.start()
 
         p1.join()
@@ -267,7 +269,7 @@ class Gaitmate:
         self.state.changeState(self.state.StateType.RECOVERING)
         self.ledAction().toggleOn()
         self.laserAction().toggleOn()
-        
+
         recv_end, send_end = Pipe(False)
         p1 = Process(target=self.hapticAction().metronome, args=(0.375, 5))
         p1.start()
@@ -275,7 +277,7 @@ class Gaitmate:
         p2.start()
         p3 = Process(target=self.checkWalking, args=(send_end,))
         p3.start()
-        
+
         p1.join()
         p2.join()
         p3.join()
@@ -297,9 +299,10 @@ class Gaitmate:
         self.ledAction().toggleOff()
         self.laserAction().toggleOff()
 
-        # button checking time reduced because data collection is discarded here. Only important thing is button press boolean
-        buttonNotPressed = self.collectData(2,4,4)
-        
+        # button checking time reduced because data collection is discarded
+        # here. Only important thing is button press boolean
+        buttonNotPressed = self.collectData(2, 4, 4)
+
         while True:
             time.sleep(0.5)
             if (not buttonNotPressed):
@@ -309,7 +312,7 @@ class Gaitmate:
 
     def checkWalking(self, send_end, duration=2):
         print("\tChecking gait..")
-        
+
         # Collect Data for 5 seconds.
         buttonNotPressed = self.collectData(duration, 4, 4)
         filename = self.writerAction().filename
@@ -318,7 +321,7 @@ class Gaitmate:
         # button not pressed returns true if the button wasn't pressed during
         # collection.
         if (buttonNotPressed):
-            
+
             # Checking to see if patient is walking okay.
             loader = LoadFileHelper(filename)
             loader.parseData()
@@ -327,14 +330,15 @@ class Gaitmate:
                  loader.getDataVariance_Z()]
 
             self.prevPredictedResult = self.predictedResult
-            self.predictedResult = self.clf.predict(np.array(X).reshape(1, -1))[0]
+            self.predictedResult = self.clf.predict(
+                np.array(X).reshape(1, -1))[0]
 
-            if ((self.predictedResult == "standing" and 
-                 self.prevPredictedResult == "standing") or 
+            if ((self.predictedResult == "standing" and
+                 self.prevPredictedResult == "standing") or
                 (self.predictedResult == "shuffling" and
                  self.prevPredictedResult == "shuffling")):
-                    send_end.send(False)
-                    return False
+                send_end.send(False)
+                return False
             else:
                 send_end.send(True)
                 return True

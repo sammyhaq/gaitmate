@@ -1,5 +1,15 @@
+"""
+LED.py
+Code by Sammy Haq
+https://github.com/sammyhaq
+
+Child class of OutputComponent that adds exclusive functions to LEDs.
+
+"""
+
 from OutputComponent import OutputComponent
 import time
+
 
 class LED(OutputComponent):
     def __init__(self, pin):

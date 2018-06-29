@@ -19,7 +19,7 @@ class Clusterer:
 
             # Checking to see if file was incorrectly saved, before parsing.
             # Prevents blank files from being parsed and ruining clustering.
-            if (loader.isBlank()): 
+            if (loader.isBlank()):
                 foundBlankFiles = True
                 print("\t'" + filenames[i] + "' found to be blank/corrupted!")
                 print("\t\tmoving to " + "'logs/blank" + filenames[i] + "'..")
@@ -43,7 +43,7 @@ class Clusterer:
                       random_state=0).fit(np.array(self.X), np.array(self.Y))
 
     def trainSVC(self):
-        
+
         self.clf = svm.SVC()
         self.clf.fit(self.X, self.Y)
 
@@ -178,7 +178,7 @@ def execute():
             print("\t\t" + str(i+1) + "\t" +
                   standingFileList[i] + "\t" +
                   str(kMeansResults.labels_[i +
-                      len(walkingFileList)]))
+                                            len(walkingFileList)]))
 
         print("\n\t**************************")
         print("\t* Shuffling Data labels: *")
@@ -189,8 +189,8 @@ def execute():
             print("\t\t" + str(i+1) + "\t" +
                   shufflingFileList[i] + "\t" +
                   str(kMeansResults.labels_[i +
-                      len(walkingFileList) +
-                      len(standingFileList) - 2]))
+                                            len(walkingFileList) +
+                                            len(standingFileList) - 2]))
     if (runSVC):
         print("\n#########################")
         print("# Printing SVC Results: #")
@@ -206,23 +206,27 @@ def execute():
         walkingTestData = []
         for i in range(len(walkingTestFileList)):
             loader = LoadFileHelper.LoadFileHelper(
-                    "logs/testData/walkingData/"+walkingTestFileList[i])
+                "logs/testData/walkingData/"+walkingTestFileList[i])
 
             # Checking to see if file was incorrectly saved, before parsing.
             # Prevents blank files from being parsed and ruining clustering.
-            if (loader.isBlank()): 
+            if (loader.isBlank()):
                 foundBlankFiles = True
-                print("\t'" + walkingTestFileList[i] + "' found to be blank/corrupted!")
-                print("\t\tmoving to " + "'logs/blank" + walkingTestFileList[i] + "'..")
-                os.rename(walkingTestFileList[i], "logs/blank" + walkingTestFileList[i])
+                print(
+                    "\t'" + walkingTestFileList[i] +
+                    "' found to be blank/corrupted!")
+                print("\t\tmoving to " + "'logs/blank" +
+                      walkingTestFileList[i] + "'..")
+                os.rename(walkingTestFileList[i],
+                          "logs/blank" + walkingTestFileList[i])
                 print("\t\t\t..done.\n")
                 continue
             else:
                 loader.parseData()  # parsing data
 
             walkingTestData.append([loader.getDataVariance_X(),
-                           loader.getDataVariance_Y(),
-                           loader.getDataVariance_Z()])
+                                    loader.getDataVariance_Y(),
+                                    loader.getDataVariance_Z()])
 
         if (foundBlankFiles):
             print("\tFound corrupted files, moved all offenders to" +
@@ -236,12 +240,17 @@ def execute():
         standingTestData = []
         for i in range(len(standingTestFileList)):
             loader = LoadFileHelper.LoadFileHelper(
-                    "logs/testData/standingData/"+standingTestFileList[i])
+                "logs/testData/standingData/"+standingTestFileList[i])
 
             if (loader.isBlank()):
-                print("\t'" + standingTestFileList[i] + "' found to be blank/corrupted!")
-                print("\t\tmoving to " + "'logs/blank" + standingTestFileList[i] + "'..")
-                os.rename(standingTestFileList[i], "logs/blank" + standingTestFileList[i])
+                print(
+                    "\t'" + standingTestFileList[i] +
+                    "' found to be blank/corrupted!")
+                print("\t\tmoving to " + "'logs/blank" +
+                      standingTestFileList[i] + "'..")
+                os.rename(
+                    standingTestFileList[i], "logs/blank" +
+                    standingTestFileList[i])
                 print("\t\t\t..done.\n")
                 continue
             else:
@@ -254,20 +263,25 @@ def execute():
         shufflingTestData = []
         for i in range(len(shufflingTestFileList)):
             loader = LoadFileHelper.LoadFileHelper(
-                    "logs/testData/shufflingData/"+shufflingTestFileList[i])
+                "logs/testData/shufflingData/"+shufflingTestFileList[i])
 
             if (loader.isBlank()):
-                print("\t'" + shufflingTestFileList[i] + "' found to be blank/corrupted!")
-                print("\t\tmoving to " + "'logs/blank" + shufflingTestFileList[i] + "'..")
-                os.rename(shufflingTestFileList[i], "logs/blank" + shufflingTestFileList[i])
+                print(
+                    "\t'" + shufflingTestFileList[i] +
+                    "' found to be blank/corrupted!")
+                print("\t\tmoving to " + "'logs/blank" +
+                      shufflingTestFileList[i] + "'..")
+                os.rename(
+                    shufflingTestFileList[i], "logs/blank" +
+                    shufflingTestFileList[i])
                 print("\t\t\t..done.\n")
                 continue
             else:
                 loader.parseData()  # parsing data
 
             shufflingTestData.append([loader.getDataVariance_X(),
-                                     loader.getDataVariance_Y(),
-                                     loader.getDataVariance_Z()])
+                                      loader.getDataVariance_Y(),
+                                      loader.getDataVariance_Z()])
 
         print("\n\t*****************************")
         print("\t* Walking Test Data Results *")

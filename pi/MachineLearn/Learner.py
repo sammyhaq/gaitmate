@@ -24,7 +24,7 @@ class Learner:
         self.y_test = None
         self.y_pred = None
         self.clf = None
-    
+
     #
     # Verifies that the file being passed into the dataset is not blank.
     #
@@ -69,7 +69,7 @@ class Learner:
     def addSampleFolder(self, folderpath, label):
         print("\tPulling from "+folderpath+"..")
         fileList = os.listdir(folderpath)
-       
+
         # Removing folderpaths (like ignore/)
         fileList.remove("ignore")
         print("\t\t"+str(len(fileList))+" data points found.")
