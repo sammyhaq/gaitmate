@@ -44,7 +44,7 @@ This device uses `scikit-learn`'s implementation of Simple Decision Tree
 Learning, which is a supervised machine learning algorithm known for its simple
 yet effective classification methods. As machine learning algorithms are
 computationally intensive, the learning model is trained on a machine with a
-stronger processor than the Pi and saved as [`dTreeExport.pkl`](pi/MachineLearn/dTreeExport.pkl)
+stronger processor than the Pi and saved as [`dTreeExport.pkl`](pi/MachineLearn/dTreeExport.pkl).
 
 The machine learning problem is to determine whether the patient is walking or
 standing/shuffling. Training data was recorded via the script shown in
