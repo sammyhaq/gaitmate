@@ -1,5 +1,6 @@
 # GaitMate
 By: Zach Samalonis, Jess Montelone, Abigail Balster, Sammy Haq
+
 Developed for the RESNA 2018 Student Design Competition.
 
 ## Overview
@@ -15,7 +16,7 @@ The overall theoretical execution of this device is akin to that of a finate
 deterministic automata with 4 states: "walking", "vibrating", "recovering", and
 "paused." Details of each state are shown below:
 
- - "Walking": The system is currently checking if the patient's gait is normal
+ - *"Walking":* The system is currently checking if the patient's gait is normal
  or not. Current configuration checks to see if the patient makes 13 steps
  within 10 seconds. If the patient is successful, then the system will loop
  into the "walking" state again. If not, the system will go into the "vibrating"
