@@ -17,13 +17,13 @@ import sys
 from State import State
 import RPi.GPIO as GPIO
 import time
-from MPU6050 import MPU6050
-from Button import Button
-from SaveFileHelper import SaveFileHelper
-from LoadFileHelper import LoadFileHelper
-from OutputComponent import OutputComponent
-from LED import LED
-from Buzzer import Buzzer
+from Component.MPU6050 import MPU6050
+from Component.Button import Button
+from FileHelper.SaveFileHelper import SaveFileHelper
+from FileHelper.LoadFileHelper import LoadFileHelper
+from Component.OutputComponent import OutputComponent
+from Component.LED import LED
+from Component.Buzzer import Buzzer
 import numpy as np
 from multiprocessing import Process, Pipe
 from HaqPyTools import UI
@@ -53,7 +53,7 @@ class Gaitmate:
         self.laser = OutputComponent(self.laserPin)
         self.led = LED(self.ledPin)
 
-        self.clf = joblib.load('/home/pi/gaitmate/pi/dTreeExport.pkl')
+        self.clf = joblib.load('/home/pi/gaitmate/pi/MachineLearn/dTreeExport.pkl')
         self.predictedResult = None
         self.prevPredictedResult = None
 
