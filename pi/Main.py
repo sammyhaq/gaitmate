@@ -1,6 +1,6 @@
 from Gaitmate import Gaitmate
 from Component.JuiceBoxListener import JuiceBoxListener
-import Component.resetGPIO
+import resetGPIO
 
 def main():
     controller = Gaitmate(0x68, 17, 27, 6, 5, 25)

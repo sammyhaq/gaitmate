@@ -1,8 +1,8 @@
 import RPi.GPIO as GPIO
-import State
-import MPU6050
-import OutputComponent
-import Button
+from Automata.State import State
+from Component.MPU6050 import MPU6050
+from Component.OutputComponent import OutputComponent
+from Component.Button import Button
 
 def main():
 
@@ -23,13 +23,13 @@ def main():
     laserPin = laserPin
     ledPin = ledPin
 
-    state = State.State()
-    gyro = MPU6050.MPU6050(gyroAddress)
-    buzzer = OutputComponent.OutputComponent(buzzerPin)
-    haptic = OutputComponent.OutputComponent(hapticPin)
-    button = Button.Button(buttonPin)
-    laser = OutputComponent.OutputComponent(laserPin)
-    led = OutputComponent.OutputComponent(ledPin)
+    state = State()
+    gyro = MPU6050(gyroAddress)
+    buzzer = OutputComponent(buzzerPin)
+    haptic = OutputComponent(hapticPin)
+    button = Button(buttonPin)
+    laser = OutputComponent(laserPin)
+    led = OutputComponent(ledPin)
 
     GPIO.cleanup()
     print("\t..done.\n");

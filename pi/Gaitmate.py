@@ -14,16 +14,16 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.externals import joblib
 from sklearn.metrics import classification_report, confusion_matrix
 import sys
-from State import State
+from Automata.State import State
 import RPi.GPIO as GPIO
 import time
+from Component.OutputComponent import OutputComponent
 from Component.MPU6050 import MPU6050
 from Component.Button import Button
-from FileHelper.SaveFileHelper import SaveFileHelper
-from FileHelper.LoadFileHelper import LoadFileHelper
-from Component.OutputComponent import OutputComponent
 from Component.LED import LED
 from Component.Buzzer import Buzzer
+from FileHelper.SaveFileHelper import SaveFileHelper
+from FileHelper.LoadFileHelper import LoadFileHelper
 import numpy as np
 from multiprocessing import Process, Pipe
 from HaqPyTools import UI
