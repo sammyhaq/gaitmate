@@ -40,7 +40,7 @@ deterministic automata with 4 states: "walking", "vibrating", "recovering", and
  the button is pressed again (this can be thought of as a pseudo-off state).
 
 ## Machine Learning Details
-This device uses [`scikit-learn`](https://scikit-learn.org)'s implementation of Simple Decision Tree
+This device uses [`scikit-learn`](http://scikit-learn.org)'s implementation of Simple Decision Tree
 Learning, which is a supervised machine learning algorithm known for its simple
 yet effective classification methods. As machine learning algorithms are
 computationally intensive, the learning model is trained on a machine with a
