@@ -162,17 +162,3 @@ python gaitmateTest.py
 ```
 
 Let me know if you have any questions via email. If it's immediate, ask Zach for my phone number and just text me (or message me via Facebook).
-
-
-### SCRATCH NOTES
-
-#### Ideas on how to implement machine learning algorithm:
-	- each file should be its own feature set.
-		- if only one number is "allowed", perhaps determine how much
-		  the numberset varies throughout the file?
-			- Like a lot of variance = walking, low = shuffling,
-			  none = standing still, etc.
-	- features: x, y, z.
-	- labels: walking, shuffling, stopped.
-	- Integrate the acceleration data like you did for the MATLAB rocket
-	  stuff, then use that to get velocity -- just check if velocity is zero
