@@ -28,6 +28,7 @@ import numpy as np
 from multiprocessing import Process, Pipe
 from HaqPyTools import UI
 
+
 class Gaitmate:
 
     def __init__(self,
@@ -54,6 +55,7 @@ class Gaitmate:
 
         self.clf = joblib.load('/home/pi/gaitmate/pi/dTreeExport.pkl')
         self.predictedResult = None
+        self.prevPredictedResult = None
 
     # accessors, just to clean up code..
 
@@ -303,9 +305,9 @@ class Gaitmate:
             if (not buttonNotPressed):
                 self.doWalkingState()
             else:
-                buttonNotPressed = self.collectData(2,4,4)
+                buttonNotPressed = self.collectData(2, 4, 4)
 
-    def checkWalking(self, send_end, duration=5):
+    def checkWalking(self, send_end, duration=2.5):
         print("\tChecking gait..")
         
         # Collect Data for 5 seconds.
@@ -324,17 +326,18 @@ class Gaitmate:
                  loader.getDataVariance_Y(),
                  loader.getDataVariance_Z()]
 
+            self.prevPredictedResult = self.predictedResult
+            self.predictedResult = self.clf.predict(np.array(X).reshape(1, -1))[0]
 
-            self.predictedResult= self.clf.predict(np.array(X).reshape(1, -1))[0]
-
-            # If patient is walking correctly, return true.
-            if (self.predictedResult == "walking"):
+            if ((self.predictedResult == "standing" and 
+                 self.prevPredictedResult == "standing") or 
+                (self.predictedResult == "shuffling" and
+                 self.prevPredictedResult == "shuffling")):
+                    send_end.send(False)
+                    return False
+            else:
                 send_end.send(True)
                 return True
-            # If patient is not walking okay, return false.
-            else:
-                send_end.send(False)
-                return False
 
         # If button is pressed, change to paused state.
         else:

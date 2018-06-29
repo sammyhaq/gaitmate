@@ -54,10 +54,14 @@ class State:
     #
     def __init__(self, currentState=StateType.WALKING):
         self.currentState = currentState  # Default State is walking.
+        self.prevState = None
 
     # Gets the type of the State.
     def getCurrentState(self):
         return self.currentState
+
+    def getPreviousState(self):
+        return self.prevState
 
     #
     # Boolean functions. Returns true if State() is in respective state.
@@ -90,6 +94,7 @@ class State:
     # Functions to change the type of the current state.
     #
     def changeState(self, stateType):
+        self.previousState = self.currentState
         self.currentState = stateType
 
     #
