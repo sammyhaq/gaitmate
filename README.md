@@ -2,88 +2,123 @@
 By: Zach Samalonis, Jess Montelone, Abigail Balster, Sammy Haq
 Developed for the RESNA 2018 Student Design Competition.
 
-### Overview
+## Overview
 
 This project's goal is to provide a wearable device for patients with
-Parkinson's Syndrome that aids the recovery of gait initiation failure,
+Parkinson's Disease that aids the recovery of gait initiation failure,
 also known as "freezing of gait." Initially developed in Arduino, the
 Gaitmate was further developed on the Raspberry Pi Zero W to develop
 more robust code and features.
 
-The purpose of this README is to help aid in navigation of the project
-files, and hopefully provide an overview of how the files interface with
-each other.
+## State Execution
+The overall theoretical execution of this device is akin to that of a finate
+deterministic automata with 4 states: "walking", "vibrating", "recovering", and
+"paused." Details of each state are shown below:
 
-### File Breakdown
+ - "Walking": The system is currently checking if the patient's gait is normal
+ or not. Current configuration checks to see if the patient makes 13 steps
+ within 10 seconds. If the patient is successful, then the system will loop
+ into the "walking" state again. If not, the system will go into the "vibrating"
+ state.
 
+ - *"Vibrating":* The system is prompting the patient for a response: to
+ them that their gait is suboptimal. If the patient presses the button within
+ a certain amount of time, then the system will go into the "paused" state. If
+ not , the system will continue to the "recovering" state. During this state,
+ a vibration will be played to gently alert the patient.
+
+ - *"Recovering":* In this current state, the previous
+ vibration will play in tandem with a metronome at a suitable walking pace in
+ the attempt to help the patient recover to a normal gait. This will continue
+ until the patient is sensed to have returned to a normal walking pace, or until
+ the button is pressed.
+
+ - *"Paused"*: The paused state suspends all device functions. Everything turns off --
+ lights, lasers, metronome, buzzer, etc. This can be reached from any mode at
+ any time by pressing the button. This mode will continue indefinitely until
+ the button is pressed again (this can be thought of as a pseudo-off state).
+
+## Machine Learning Details
+This device uses `scikit-learn`'s implementation of Simple Decision Tree
+Learning, which is a supervised machine learning algorithm known for its simple
+yet effective classification methods. As machine learning algorithms are
+computationally intensive, the learning model is trained on a machine with a
+stronger processor than the Pi and saved as [`dTreeExport.pkl`](pi/MachineLearn/dTreeExport.pkl)
+
+The machine learning problem is to determine whether the patient is walking or
+standing/shuffling. Training data was recorded via the script shown in
+[`trainModel.py`](pi/MachineLearn/trainModel.py), after which a Decision Tree
+Model was generated via [`Learner.py`](pi/MachineLearn/Learner.py). After
+verifying the model's effectiveness via a confusion-matrix and classification
+report, the model was exported and tested for a final time via the real-time
+classification code in [`Tester.py`](pi/MachineLearn/Tester.py).
+
+Originally, there were three possible labels/classifications considered:
+"walking", "standing", or "shuffling". However, difficulty arose when
+differentiating between "shuffling" and "walking", as "shuffling" is such an
+intermediary between the two current labels. A potential solution to this problem
+would be exploring different machine learning algorithms -- however, increasing
+the amount of computation required for this algorithm would be troublesome on
+the Raspberry Pi Zero W's limited processor. Another solution would be collecting more data. However, as "shuffling" and "standing" were both considered to be viable
+candidates for entering into the recovery phase of the device, they were
+inputted into the same model as the same classification to simplify the problem
+and increase accuracy.
+
+
+## File Breakdown
 The following section was created in order to help explain the structure of the
 code and give an inkling as to what the purpose of each .py file in this
 workspace is.
 
-#### [`arduino/`](arduino/)
+### [`arduino/`](arduino/)
 This folder contains the older code that ran when the arduino was the core of
 the Gaitmate. While this code works, it does not contain the same machine learning
-algorithms and datasets that the Raspberry Pi implementation does.  
+algorithms and datasets that the Raspberry Pi implementation does. It is also
+not as robust (class design, etc). 
 
-#### [`pi/`](pi/)
+### [`pi/`](pi/)
 This folder contains the code that is required for the Raspberry Pi
 implementation of the Gaitmate.
 
-##### [`Button.py`](pi/Button.py)
-This python-defined object represents an input Button component attached via
-GPIO pin to the Raspberry Pi, and contains a simple `isPressed()` function. This
-function returns true if pressed, and false if not.
+#### [`pi/Automata/`](pi/Automata/)
+This package contains the finite deterministic automata-inspired State class,
+which is used for much of the decision-making code found in the core code.
 
-The purpose of this button is to "pause" the state of the system, suspending all
-functions such as haptics, walk-count, and data collection.
+#### [`pi/Component/`](pi/Component/)
+This package contains all of the object representations of the Raspberry Pi's
+onboard components. Although things such as the LEDs, buttons and buzzers can be
+implemented by `OutputComponent.py`, the child classes such as `LED.py` contain
+expanded functionality exclusive to that component (for example, making the LED
+"breathe"). These components are all defined as if they are connected via BCM
+pin. Therefore, one should initialize the components pin by their BCM number,
+**NOT** by the physical pin number.
 
-##### [`Gaitmate.py`](pi/Gaitmate.py)
-This python class is where all components of the Raspberry Pi come together in
-one interface. It contains the initialization for all of the classes, and acts
-as the "front-end" for all of the other code. All code is run through this
-script.
+Component details (such as function definitions) can be found in their respective files.
 
-##### [`gaitmateTest.py`](pi/gaitmateTest.py)
+#### [`pi/FileHelper/`](pi/FileHelper/)
+This package contains both the `SaveFileHelper` and `LoadFileHelper` class,
+which are used to save and parse the log files (both for training the
+DecisionTree machine learning algorithm and testing it in real-time).
+
+#### [`componentTest.py`](pi/componentTest.py)
 This is a simple driver code for testing all of the components for the Gaitmate.
 This ensures that the functions defined in `Gaitmate.py` are working properly.
 
-##### [`ledTest.py`](pi/ledTest.py)
-This is a simple standalone driver code for the LED. It is more interactive than
-`gaitmateTest.py` and can be used to troubleshoot the LED pin.
+#### [`Gaitmate.py`](pi/Gaitmate.py)
+This python class is where all components of the Raspberry Pi come together in
+one interface. It contains the initialization for all of the classes, and acts
+as the "front-end" for all of the other code. All code is run through this
+script. Acting as the controller, `Main.py` calls on this to do most of the
+work. It contains the methods for checking walking, state execution, etc.
 
-##### [`LoadFileHelper.py`](pi/LoadFileHelper.py)
-This class is responsible for the loading and parsing of files found in
-[`pi/logs`](pi/logs). This is where the data required for machine learning is
-saved to to help train the machine to adjust to the person's gait. The
-capabilities of this class can be tested by using the driver code found in
-[`loadFileTester.py`](pi/loadFileTester.py).
+#### [`Main.py`](pi/Main.py)
+This code is the code to execute when running the Gaitmate normally. This script
+launches on boot. It links the JuiceBoxListener to the code and assigns pins to
+the Gaitmate class controller. After blinking its LED to let the user know it is ready,
+it then tells the Gaitmate to start its cycle (in the paused state).
 
-##### [`MPU6050.py`](pi/MPU6050.py)
-This class is responsible for all of the accelerometer/gyro/temperature
-interpretation code.
-
-##### [`OutputComponent.py`](pi/OutputComponent.py)
-This class contains all of the functions every output component has on the GPIO
-pins of the Raspberry Pi. This contains (but is not limited to) code for the
-Laser, LED, Buzzer, and Haptics.
-
-##### [`resetGPIO.py`](pi/resetGPIO.py)
-Simple driver's code to reset all GPIO pins.
-
-##### [`SaveFileHelper.py`](pi/SaveFileHelper.py)
-This class is responsible for the saving and writing of files found in
-[`pi/logs`](pi/logs). This is where the data required for machine learning is
-saved to help train the machine to adjust to the person's gait. The capabilities
-of this class can be tested by using the driver code found in
-[`saveFileTester.py`](pi/saveFileTester.py).
-
-##### [`State.py`](pi/State.py)
-
-*WIP* 
-
-##### [`trainModel_main.py`](pi/trainModel_main.py)
-This driver code contains code for saving data in order to train a machine
-learning model. 
+#### [`resetGPIO.py`](pi/resetGPIO.py)
+Simple driver code to reset all GPIO pins.
 
 
 ### Terminal Instructions (for git and everything)
