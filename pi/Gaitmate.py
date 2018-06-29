@@ -307,7 +307,7 @@ class Gaitmate:
             else:
                 buttonNotPressed = self.collectData(2, 4, 4)
 
-    def checkWalking(self, send_end, duration=2.5):
+    def checkWalking(self, send_end, duration=2):
         print("\tChecking gait..")
         
         # Collect Data for 5 seconds.

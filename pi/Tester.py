@@ -16,6 +16,11 @@ def main():
         recv_end, send_end = Pipe(False)
         controller.checkWalking(send_end)
 
-        print("\t\t\t" + controller.predictedResult)
+        print("\t\t\tcurrentState: " + controller.predictedResult)
+
+        if (controller.prevPredictedResult == None):
+            print("\t\t\tpreviousState: None")
+        else:
+            print("\t\t\tpreviousState: " + controller.prevPredictedResult)
 
 main()
