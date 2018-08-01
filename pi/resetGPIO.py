@@ -1,8 +1,8 @@
 import RPi.GPIO as GPIO
 from Automata.State import State
-from Component.MPU6050 import MPU6050
-from Component.OutputComponent import OutputComponent
-from Component.Button import Button
+from HaqPi.Component.MPU6050 import MPU6050
+from HaqPi.Component.OutputComponent import OutputComponent
+from HaqPi.Component.Button import Button
 
 
 def main():

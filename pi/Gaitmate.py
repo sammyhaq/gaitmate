@@ -18,11 +18,11 @@ import sys
 from Automata.State import State
 import RPi.GPIO as GPIO
 import time
-from Component.OutputComponent import OutputComponent
-from Component.MPU6050 import MPU6050
-from Component.Button import Button
-from Component.LED import LED
-from Component.Buzzer import Buzzer
+from HaqPi.Component.OutputComponent import OutputComponent
+from HaqPi.Component.MPU6050 import MPU6050
+from HaqPi.Component.Button import Button
+from HaqPi.Component.LED import LED
+from HaqPi.Component.Buzzer import Buzzer
 from FileHelper.SaveFileHelper import SaveFileHelper
 from FileHelper.LoadFileHelper import LoadFileHelper
 import numpy as np
@@ -53,6 +53,9 @@ class Gaitmate:
         self.button = Button(self.buttonPin)
         self.laser = OutputComponent(self.laserPin)
         self.led = LED(self.ledPin)
+
+        self.metronomeDelay = 0.375
+        self.laserToggle = True
 
         self.clf = joblib.load(
             '/home/pi/gaitmate/pi/MachineLearn/dTreeExport.pkl')
@@ -146,7 +149,7 @@ class Gaitmate:
     #
     def testBuzzer(self):
         print("Testing buzzer..")
-        self.buzzerAction().metronome(0.375, 5)
+        self.buzzerAction().metronome(self.metronomeDelay, 5)
         print("\t.. done.\n")
 
     def testGyro(self):
@@ -162,7 +165,7 @@ class Gaitmate:
 
     def testHaptic(self):
         print("Testing haptics..")
-        self.hapticAction().metronome(0.375, 5)
+        self.hapticAction().metronome(self.metronomeDelay, 5)
         print("\t.. done.\n")
 
     def testButton(self):
@@ -195,7 +198,7 @@ class Gaitmate:
         print("Will pulse continuously. Press ctrl+c to exit.")
 
         try:
-            self.ledAction().metronome(0.375, 5)
+            self.ledAction().metronome(self.metronomeDelay, 5)
         except KeyboardInterrupt:
             print("\t.. done.\n")
 
@@ -246,7 +249,8 @@ class Gaitmate:
 
         recv_end, send_end = Pipe(False)
 
-        p1 = Process(target=self.hapticAction().metronome, args=(0.375, 3))
+        p1 = Process(target=self.hapticAction().metronome,
+                     args=(self.metronomeDelay, 3))
         p1.start()
         p2 = Process(target=self.checkWalking, args=(send_end, 3))
         p2.start()
@@ -268,12 +272,18 @@ class Gaitmate:
         UI.box(["Entering Recovering State"])
         self.state.changeState(self.state.StateType.RECOVERING)
         self.ledAction().toggleOn()
-        self.laserAction().toggleOn()
+
+        if (self.laserToggle): 
+            self.laserAction().toggleOn()
+        else:
+            self.laserAction().toggleOff()
 
         recv_end, send_end = Pipe(False)
-        p1 = Process(target=self.hapticAction().metronome, args=(0.375, 5))
+        p1 = Process(target=self.hapticAction().metronome,
+                     args=(self.metronomeDelay, 5))
         p1.start()
-        p2 = Process(target=self.buzzerAction().metronome, args=(0.375, 5))
+        p2 = Process(target=self.buzzerAction().metronome,
+                     args=(self.metronomeDelay, 5))
         p2.start()
         p3 = Process(target=self.checkWalking, args=(send_end,))
         p3.start()

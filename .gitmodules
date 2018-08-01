@@ -1,3 +1,6 @@
 [submodule "pi/HaqPyTools"]
 	path = pi/HaqPyTools
 	url = https://github.com/sammyhaq/HaqPyTools
+[submodule "pi/HaqPi"]
+	path = pi/HaqPi
+	url = https://github.com/sammyhaq/HaqPi

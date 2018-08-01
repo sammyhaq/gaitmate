@@ -1,5 +1,5 @@
 from Gaitmate import Gaitmate
-from Component.JuiceBoxListener import JuiceBoxListener
+from HaqPi.Component.JuiceBoxListener import JuiceBoxListener
 import resetGPIO
 
 
