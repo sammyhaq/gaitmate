@@ -28,7 +28,7 @@ from FileHelper.LoadFileHelper import LoadFileHelper
 import numpy as np
 from multiprocessing import Process, Pipe
 from HaqPyTools import UI
-
+from InitSettings import InitSettings as settings
 
 class Gaitmate:
 
@@ -54,8 +54,7 @@ class Gaitmate:
         self.laser = OutputComponent(self.laserPin)
         self.led = LED(self.ledPin)
 
-        self.metronomeDelay = 0.375
-        self.laserToggle = True
+        self.metronomeDelay = (60/settings.numberOfSteps) - 0.375
 
         self.clf = joblib.load(
             '/home/pi/gaitmate/pi/MachineLearn/dTreeExport.pkl')
@@ -273,7 +272,7 @@ class Gaitmate:
         self.state.changeState(self.state.StateType.RECOVERING)
         self.ledAction().toggleOn()
 
-        if (self.laserToggle): 
+        if (settings.laserToggle): 
             self.laserAction().toggleOn()
         else:
             self.laserAction().toggleOff()
