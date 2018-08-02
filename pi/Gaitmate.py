@@ -54,7 +54,10 @@ class Gaitmate:
         self.laser = OutputComponent(self.laserPin)
         self.led = LED(self.ledPin)
 
-        self.metronomeDelay = (60/settings.numberOfSteps) - 0.375
+        self.metronomeDelay = (float(60)/settings.numberOfSteps) - 0.375
+        if (self.metronomeDelay <= 0):
+            print("\t**ERROR** Not a valid numberOfSteps defined in InitSettings.py. Exiting..")
+            sys.exit(0)
 
         self.clf = joblib.load(
             '/home/pi/gaitmate/pi/MachineLearn/dTreeExport.pkl')
@@ -188,7 +191,11 @@ class Gaitmate:
 
         try:
             while True:
-                self.laserAction().step(0.2)
+                if (settings.laserToggle):
+                    self.laserAction().step(0.2)
+                else:
+                    print("\tLaserToggle is set to off in InitSettings.py. Exiting..")
+                    break
         except KeyboardInterrupt:
             print("\t.. done.\n")
 

@@ -7,7 +7,7 @@ import resetGPIO
 
 def main():
 
-    UI.box(["Tester.py", "Code by Sammy Haq"])
+    UI.box(["classificationTest.py", "Code by Sammy Haq"])
 
     resetGPIO
 
@@ -17,9 +17,10 @@ def main():
         recv_end, send_end = Pipe(False)
         controller.checkWalking(send_end)
 
+        print("\t\t"+time.strftime("[%m/%d/%y | %H:%M:%S]"))
         print("\t\t\tcurrentState: " + controller.predictedResult)
 
-        if (if controller.prevPredictedResult is None):
+        if (controller.prevPredictedResult is None):
             print("\t\t\tpreviousState: None")
         else:
             print("\t\t\tpreviousState: " + controller.prevPredictedResult)
