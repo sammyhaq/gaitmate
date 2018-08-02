@@ -109,7 +109,6 @@ class Gaitmate:
     # Collects Data for a certain period of time at a certain frequency.
     # Returns true if the button is not pressed. Returns false if the button is
     # pressed.
-
     def collectData(self, duration, collectionFrequency, accuracy):
 
         if (collectionFrequency == 0):
@@ -249,16 +248,16 @@ class Gaitmate:
     #
     def doVibratingState(self):
         UI.box(["Entering Vibrating State"])
-        time.sleep(0.5)
+        time.sleep(settings.vibrationState_entryDelay)
         self.state.changeState(self.state.StateType.VIBRATING)
         self.ledAction().toggleOn()
 
         recv_end, send_end = Pipe(False)
 
         p1 = Process(target=self.hapticAction().metronome,
-                     args=(self.metronomeDelay, 3))
+                     args=(self.metronomeDelay, settings.vibrationStateDuration))
         p1.start()
-        p2 = Process(target=self.checkWalking, args=(send_end, 3))
+        p2 = Process(target=self.checkWalking, args=(send_end, settings.vibrationStateDuration))
         p2.start()
 
         p1.join()
@@ -285,25 +284,32 @@ class Gaitmate:
             self.laserAction().toggleOff()
 
         recv_end, send_end = Pipe(False)
-        p1 = Process(target=self.hapticAction().metronome,
-                     args=(self.metronomeDelay, settings.recoveryCycleTime, settings.stepdownDelay))
+        p1 = Process(target=self.hapticAndBuzzerMetronome,
+                     args=(self.metronomeDelay, settings.stepdownDelay))
         p1.start()
-        p2 = Process(target=self.buzzerAction().metronome,
-                     args=(self.metronomeDelay, settings.recoveryCycleTime, settings.stepdownDelay))
-        p2.start()
-        p3 = Process(target=self.checkWalking, args=(send_end,))
-        p3.start()
 
-        p1.join()
-        p2.join()
-        p3.join()
+        while True:
+            p2 = self.checkWalking(send_end, process=p1)
 
-        if (recv_end.recv()):
-            # If walking okay, do walking state.
-            self.doWalkingState()
-        else:
-            # If walking badly, do recovery state.
-            self.doRecoveringState()
+            if (recv_end.recv()):
+                # If walking okay, do walking state.
+                p1.terminate()
+                self.hapticAction().toggleOff()
+                self.buzzerAction().toggleOff()
+                self.doWalkingState()
+            else:
+                # If walking badly, do recovery state.
+                recv_end, send_end = Pipe(False)
+            
+
+    def hapticAndBuzzerMetronome(self, delay, stepdownDelay=0.375):
+        while True:
+            GPIO.output(self.hapticPin, GPIO.HIGH)
+            GPIO.output(self.buzzerPin, GPIO.HIGH)
+            time.sleep(stepdownDelay)
+            GPIO.output(self.hapticPin, GPIO.LOW)
+            GPIO.output(self.buzzerPin, GPIO.LOW)
+            time.sleep(delay)
 
     #
     # Paused State driver code
@@ -326,7 +332,7 @@ class Gaitmate:
             else:
                 buttonNotPressed = self.collectData(2, 4, 4)
 
-    def checkWalking(self, send_end, duration=2):
+    def checkWalking(self, send_end, duration=2, process=None):
         print("\tChecking gait..")
 
         # Collect Data for 5 seconds.
@@ -361,4 +367,8 @@ class Gaitmate:
 
         # If button is pressed, change to paused state.
         else:
+            if process is not None:
+                process.terminate()
+                self.hapticAction().toggleOff()
+                self.buzzerAction().toggleOff()
             self.doPausedState()
