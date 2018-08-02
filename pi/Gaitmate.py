@@ -228,9 +228,10 @@ class Gaitmate:
     #
     def doWalkingState(self):
         UI.box(["Entering Walking State"])
-        time.sleep(0.5)
+        time.sleep(settings.walkingState_entryDelay)
         self.state.changeState(self.state.StateType.WALKING)
         self.ledAction().toggleOn()
+        self.laserAction().toggleOff()
 
         recv_end, send_end = Pipe(False)
 
@@ -255,9 +256,9 @@ class Gaitmate:
         recv_end, send_end = Pipe(False)
 
         p1 = Process(target=self.hapticAction().metronome,
-                     args=(self.metronomeDelay, settings.vibrationStateDuration))
+                     args=(self.metronomeDelay, settings.vibrationState_Duration))
         p1.start()
-        p2 = Process(target=self.checkWalking, args=(send_end, settings.vibrationStateDuration))
+        p2 = Process(target=self.checkWalking, args=(send_end, settings.vibrationState_Duration))
         p2.start()
 
         p1.join()
@@ -316,23 +317,24 @@ class Gaitmate:
     #
     def doPausedState(self):
         UI.box(["Entering Paused State"])
-        time.sleep(3)
-        self.state.changeState(self.state.StateType.PAUSED)
         self.ledAction().toggleOff()
         self.laserAction().toggleOff()
+        time.sleep(settings.pausedState_entryDelay)
+        self.state.changeState(self.state.StateType.PAUSED)
+
 
         # button checking time reduced because data collection is discarded
         # here. Only important thing is button press boolean
-        buttonNotPressed = self.collectData(2, 4, 4)
+        buttonNotPressed = self.collectData(settings.checkDuration, 4, 4)
 
         while True:
             time.sleep(0.5)
             if (not buttonNotPressed):
                 self.doWalkingState()
             else:
-                buttonNotPressed = self.collectData(2, 4, 4)
+                buttonNotPressed = self.collectData(settings.checkDuration, 4, 4)
 
-    def checkWalking(self, send_end, duration=2, process=None):
+    def checkWalking(self, send_end, duration=settings.checkDuration, process=None):
         print("\tChecking gait..")
 
         # Collect Data for 5 seconds.

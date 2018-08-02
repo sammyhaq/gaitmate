@@ -5,9 +5,9 @@ from HaqPyTools import UI
 import resetGPIO
 
 
-def main():
+def execute():
 
-    UI.box(["classificationTest.py", "Code by Sammy Haq"])
+    UI.box(["observer.py", "Code by Sammy Haq"])
 
     resetGPIO
 
@@ -24,6 +24,3 @@ def main():
             print("\t\t\tpreviousState: None")
         else:
             print("\t\t\tpreviousState: " + controller.prevPredictedResult)
-
-
-main()

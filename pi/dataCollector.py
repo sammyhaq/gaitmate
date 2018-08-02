@@ -1,5 +1,5 @@
 """
-trainModel_main.py
+dataCollector.py
 Code by Sammy Haq
 
 Driver code for the system to just collect data, making a new file every 5
@@ -11,9 +11,9 @@ seconds. Takes 4 data points per second.
 import time
 import Gaitmate
 import RPi.GPIO as GPIO
+import resetGPIO
 
-
-def main():
+def execute():
     # PINOUT
     # Buzzer:  PIN 11   BCM 17
     # Haptic:  PIN 13   BCM 27
@@ -22,19 +22,22 @@ def main():
     # Laser:   PIN 29   BCM 5
     ##
 
+    resetGPIO
+
     controller = Gaitmate.Gaitmate(0x68, 17, 27, 6, 5, 25)
 
     try:
         while True:
             controller.ledAction().toggleOn()
-            print("Saving new file..")
+            print(time.strftime("Creating '%m-%d-%y_%H%M%S' in 'logs/'..", time.localtime()))
+
             # Collecting new dataset every 5 seconds, 4 points a second,
             # 4 decimal places..
             isCollecting = controller.collectData(5, 4, 4)
 
             print("\tClosing writer..")
             controller.writerAction().closeWriter()
-            print("\t\t..done.")
+            print("\t\t..done.\n")
             if (isCollecting):
                 continue
             else:
@@ -53,6 +56,3 @@ def main():
 
         controller.ledAction().toggleOff()
         GPIO.cleanup()
-
-
-main()
