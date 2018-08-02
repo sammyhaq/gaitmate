@@ -286,10 +286,10 @@ class Gaitmate:
 
         recv_end, send_end = Pipe(False)
         p1 = Process(target=self.hapticAction().metronome,
-                     args=(self.metronomeDelay, 5, settings.stepdownDelay))
+                     args=(self.metronomeDelay, settings.recoveryCycleTime, settings.stepdownDelay))
         p1.start()
         p2 = Process(target=self.buzzerAction().metronome,
-                     args=(self.metronomeDelay, 5, settings.stepdownDelay))
+                     args=(self.metronomeDelay, settings.recoveryCycleTime, settings.stepdownDelay))
         p2.start()
         p3 = Process(target=self.checkWalking, args=(send_end,))
         p3.start()
