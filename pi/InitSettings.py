@@ -1,4 +1,5 @@
 class InitSettings:
-    
-    numberOfSteps = 80
+   
+    stepdownDelay = 0.375
+    numberOfSteps = 60 # per minute.
     laserToggle = True

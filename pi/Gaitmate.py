@@ -54,7 +54,7 @@ class Gaitmate:
         self.laser = OutputComponent(self.laserPin)
         self.led = LED(self.ledPin)
 
-        self.metronomeDelay = (float(60)/settings.numberOfSteps) - 0.375
+        self.metronomeDelay = (float(60)/settings.numberOfSteps) - settings.stepdownDelay
         if (self.metronomeDelay <= 0):
             print("\t**ERROR** Not a valid numberOfSteps defined in InitSettings.py. Exiting..")
             sys.exit(0)
@@ -151,7 +151,7 @@ class Gaitmate:
     #
     def testBuzzer(self):
         print("Testing buzzer..")
-        self.buzzerAction().metronome(self.metronomeDelay, 5)
+        self.buzzerAction().metronome(self.metronomeDelay, 5, settings.stepdownDelay)
         print("\t.. done.\n")
 
     def testGyro(self):
@@ -167,7 +167,7 @@ class Gaitmate:
 
     def testHaptic(self):
         print("Testing haptics..")
-        self.hapticAction().metronome(self.metronomeDelay, 5)
+        self.hapticAction().metronome(self.metronomeDelay, 5, settings.stepdownDelay)
         print("\t.. done.\n")
 
     def testButton(self):
@@ -286,10 +286,10 @@ class Gaitmate:
 
         recv_end, send_end = Pipe(False)
         p1 = Process(target=self.hapticAction().metronome,
-                     args=(self.metronomeDelay, 5))
+                     args=(self.metronomeDelay, 5, settings.stepdownDelay))
         p1.start()
         p2 = Process(target=self.buzzerAction().metronome,
-                     args=(self.metronomeDelay, 5))
+                     args=(self.metronomeDelay, 5, settings.stepdownDelay))
         p2.start()
         p3 = Process(target=self.checkWalking, args=(send_end,))
         p3.start()
