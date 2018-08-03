@@ -155,7 +155,11 @@ assume that 1) you and abba are not connected to the same wifi network or 2)
 abba is not powered up completely yet.
 
 After this, you will be prompted to enter in a password. The password for abba
-is 'gaitmate2018'. If all goes well, you should be greeted with a new Terminal.
+is:
+
+>! gaitmate2018
+
+If all goes well, you should be greeted with a new Terminal.
 You can see if you are in the correct terminal by looking at the user callsign
 to the left of your cursor (it should say something along the lines of
 'pi@abba', followed by your current working directory).
