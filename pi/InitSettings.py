@@ -28,4 +28,7 @@ class InitSettings:
     # has to be pressed during startup if one wants to enter data entry mode.
     startupDuration = 5
 
+    # Option to enable a secondary haptic pin or not. If True, a secondary pin
+    # will be assigned via the secondHapticPin variable.
     enableSecondHaptic = True
+    secondaryHapticPin = 16

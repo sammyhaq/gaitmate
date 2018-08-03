@@ -45,7 +45,7 @@ class Gaitmate:
         self.hapticPin = hapticPin
 
         if (settings.enableSecondHaptic):
-            self.hapticPin2 = 16
+            self.hapticPin2 = settings.secondaryHapticPin
         else:
             self.hapticPin2 = None
 
