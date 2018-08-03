@@ -119,6 +119,12 @@ launches on boot. It links the JuiceBoxListener to the code and assigns pins to
 the Gaitmate class controller. After blinking its LED to let the user know it is ready,
 it then tells the Gaitmate to start its cycle (in the paused state).
 
+#### [`observer.py`](pi/observer.py)
+Simple driver code that displays the current inferred state from the machine
+learning algorithm, and the previous inferred state. Useful for debugging false
+negatives, false positives, and other decision-making errors while
+not running the entire [Main](pi/Main.py) code.
+
 #### [`resetGPIO.py`](pi/resetGPIO.py)
 Simple driver code to reset all GPIO pins.
 
