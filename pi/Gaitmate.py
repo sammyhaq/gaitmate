@@ -30,6 +30,7 @@ from multiprocessing import Process, Pipe
 from HaqPyTools import UI
 from InitSettings import InitSettings as settings
 
+
 class Gaitmate:
 
     def __init__(self,
@@ -54,9 +55,12 @@ class Gaitmate:
         self.laser = OutputComponent(self.laserPin)
         self.led = LED(self.ledPin)
 
-        self.metronomeDelay = (float(60)/settings.numberOfSteps) - settings.stepdownDelay
+        self.metronomeDelay = (float(60)/settings.numberOfSteps) -
+        (settings.stepdownDelay)
+        
         if (self.metronomeDelay <= 0):
-            print("\t**ERROR** Not a valid numberOfSteps defined in InitSettings.py. Exiting..")
+            print("\t**ERROR** Not a valid numberOfSteps defined in" +
+                  " InitSettings.py. Exiting..")
             sys.exit(0)
 
         self.clf = joblib.load(
@@ -64,8 +68,7 @@ class Gaitmate:
         self.predictedResult = None
         self.prevPredictedResult = None
 
-    # accessors, just to clean up code..
-
+    # Component accessors.
     def buzzerAction(self):
         return self.buzzer
 
@@ -150,7 +153,8 @@ class Gaitmate:
     #
     def testBuzzer(self):
         print("Testing buzzer..")
-        self.buzzerAction().metronome(self.metronomeDelay, 5, settings.stepdownDelay)
+        self.buzzerAction().metronome(self.metronomeDelay, 5,
+                                      settings.stepdownDelay)
         print("\t.. done.\n")
 
     def testGyro(self):
@@ -166,7 +170,8 @@ class Gaitmate:
 
     def testHaptic(self):
         print("Testing haptics..")
-        self.hapticAction().metronome(self.metronomeDelay, 5, settings.stepdownDelay)
+        self.hapticAction().metronome(self.metronomeDelay, 5,
+                                      settings.stepdownDelay)
         print("\t.. done.\n")
 
     def testButton(self):
@@ -193,7 +198,8 @@ class Gaitmate:
                 if (settings.laserToggle):
                     self.laserAction().step(0.2)
                 else:
-                    print("\tLaserToggle is set to off in InitSettings.py. Exiting..")
+                    print("\tLaserToggle is set to off in InitSettings.py. " + 
+                          "Exiting..")
                     break
         except KeyboardInterrupt:
             print("\t.. done.\n")
@@ -206,8 +212,10 @@ class Gaitmate:
             self.ledAction().metronome(self.metronomeDelay, 5)
         except KeyboardInterrupt:
             print("\t.. done.\n")
-
-    # Execution loop of the Gaitmate.
+    
+    #
+    # Main Execution loop of the Gaitmate.
+    #
     def execute(self):
         while True:
 
@@ -256,9 +264,17 @@ class Gaitmate:
         recv_end, send_end = Pipe(False)
 
         p1 = Process(target=self.hapticAction().metronome,
-                     args=(self.metronomeDelay, settings.vibrationState_Duration))
+                     args=(self.metronomeDelay,
+                           settings.vibrationState_Duration
+                           )
+                     )
         p1.start()
-        p2 = Process(target=self.checkWalking, args=(send_end, settings.vibrationState_Duration))
+
+        p2 = Process(target=self.checkWalking, 
+                     args=(send_end, 
+                           settings.vibrationState_Duration
+                           )
+                     )
         p2.start()
 
         p1.join()
@@ -301,8 +317,9 @@ class Gaitmate:
             else:
                 # If walking badly, do recovery state.
                 recv_end, send_end = Pipe(False)
-            
 
+    # Buzzer and haptic driver code as one singular process, to cut down on
+    # multiprocessing time.
     def hapticAndBuzzerMetronome(self, delay, stepdownDelay=0.375):
         while True:
             GPIO.output(self.hapticPin, GPIO.HIGH)
@@ -322,7 +339,6 @@ class Gaitmate:
         time.sleep(settings.pausedState_entryDelay)
         self.state.changeState(self.state.StateType.PAUSED)
 
-
         # button checking time reduced because data collection is discarded
         # here. Only important thing is button press boolean
         buttonNotPressed = self.collectData(settings.checkDuration, 4, 4)
@@ -332,9 +348,12 @@ class Gaitmate:
             if (not buttonNotPressed):
                 self.doWalkingState()
             else:
-                buttonNotPressed = self.collectData(settings.checkDuration, 4, 4)
+                buttonNotPressed = self.collectData(settings.checkDuration,
+                                                    4, 4)
 
-    def checkWalking(self, send_end, duration=settings.checkDuration, process=None):
+    def checkWalking(self, send_end,
+                     duration=settings.checkDuration,
+                     process=None):
         print("\tChecking gait..")
 
         # Collect Data for 5 seconds.
