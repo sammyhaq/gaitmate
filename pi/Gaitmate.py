@@ -55,8 +55,8 @@ class Gaitmate:
         self.laser = OutputComponent(self.laserPin)
         self.led = LED(self.ledPin)
 
-        self.metronomeDelay = (float(60)/settings.numberOfSteps) -
-        (settings.stepdownDelay)
+        self.metronomeDelay = ((float(60)/settings.numberOfSteps) -
+        (settings.stepdownDelay))
         
         if (self.metronomeDelay <= 0):
             print("\t**ERROR** Not a valid numberOfSteps defined in" +
