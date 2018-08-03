@@ -135,7 +135,7 @@ to at least get a rudimentary knowledge of everything before you delve deep into
 the code here (otherwise, you may get lost).
 
 However, I completely get it if you don't want to spend time learning how to use
-a bash shell, I get it. In this section, I'm going to try to give you the bare
+a bash shell. In this section, I'm going to try to give you the bare
 minimum Terminal knowledge required to SSH into the Raspberry Pi, navigate to
 the project folder, edit files, and run scripts.
 
@@ -166,8 +166,8 @@ to the left of your cursor (it should say something along the lines of
 
 It's worth noting that as soon as you SSH into abba, you'll find that a script
 is automatically running -- this is the main code of the GaitMate. To exit,
-simply press 'control + c'. **This is required if you are intending to change
-the contents of the code.** 
+simply press 'control + c'. **This is required if you are intending to do
+anything besides run the main code.** 
 
 Now, you might be asking: "Why did you name the Raspberry Pi 'abba', Sammy? Why did
 you give the Raspberry Pi a name in the first place?".
@@ -187,10 +187,11 @@ password for [GitHub](https://www.github.com/).** If you don't have permission
 to access the files (these files are located in a private respository), email me
 at sammy.haq1@gmail.com (or just request permission through GitHub).
 
-I currently have auto-pushing to the repository disabled, because I don't want
-the master branch to be modified without my knowledge (and proper testing to ensure
-it works). If you have an edit to make, please make a merge request so I can
-take a look at it before submitting.
+It is my personal requset that you do not push to the repository directly before
+consulting me first, because I don't want the master branch to be modified without
+my knowledge (and the proper testing to ensure the code is solid and works with everything
+else). If you have an edit to make, please reach out to me so I can take a look at it
+beforehand.
 
 ### Running a Python Script
 To run any of the python scripts, be sure that you are in the same spot the
