@@ -189,12 +189,12 @@ class Gaitmate:
     def testHaptic(self):
         print("Testing haptics..")
 
-        p1 = Process(target=self.hapticAction().metronome
+        p1 = Process(target=self.hapticAction().metronome,
                      args=(self.metronomeDelay, 5, settings.stepdownDelay))
         p1.start()
 
         if (settings.enableSecondHaptic):
-            p2 = Process(target=self.haptic2Action().metronome
+            p2 = Process(target=self.haptic2Action().metronome,
                          args=(self.metronomeDelay, 5, settings.stepdownDelay))
             p2.start()
 
@@ -369,7 +369,7 @@ class Gaitmate:
                 GPIO.output(self.hapticPin2, GPIO.HIGH)
             GPIO.output(self.buzzerPin, GPIO.HIGH)
             time.sleep(stepdownDelay)
-            GPIO.output(self.hapticPin, GPIO.LOW)a
+            GPIO.output(self.hapticPin, GPIO.LOW)
             if (settings.enableSecondHaptic):
                 GPIO.output(self.hapticPin2, GPIO.LOW)
             GPIO.output(self.buzzerPin, GPIO.LOW)

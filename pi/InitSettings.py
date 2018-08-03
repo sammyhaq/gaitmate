@@ -28,4 +28,4 @@ class InitSettings:
     # has to be pressed during startup if one wants to enter data entry mode.
     startupDuration = 5
 
-    enableSecondHaptic = True
+    enableSecondHaptic = False
