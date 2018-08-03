@@ -27,3 +27,5 @@ class InitSettings:
     # Duration of the startup sequence of the system. Important, as the button
     # has to be pressed during startup if one wants to enter data entry mode.
     startupDuration = 5
+
+    enableSecondHaptic = True
