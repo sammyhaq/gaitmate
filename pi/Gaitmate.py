@@ -43,6 +43,12 @@ class Gaitmate:
         self.gyroAddress = gyroAddress
         self.buzzerPin = buzzerPin
         self.hapticPin = hapticPin
+
+        if (settings.enableSecondHaptic):
+            self.hapticPin2 = 16
+        else:
+            self.hapticPin2 = None
+
         self.buttonPin = buttonPin
         self.laserPin = laserPin
         self.ledPin = ledPin
@@ -51,6 +57,12 @@ class Gaitmate:
         self.gyro = MPU6050(self.gyroAddress)
         self.buzzer = Buzzer(self.buzzerPin)
         self.haptic = OutputComponent(self.hapticPin)
+
+        if (settings.enableSecondHaptic):
+            self.haptic2 = OutputComponent(self.hapticPin2)
+        else:
+            self.haptic2 = None
+
         self.button = Button(self.buttonPin)
         self.laser = OutputComponent(self.laserPin)
         self.led = LED(self.ledPin)
@@ -78,6 +90,9 @@ class Gaitmate:
     def hapticAction(self):
         return self.haptic
 
+    def haptic2Action(self):
+        return self.haptic2
+
     def buttonAction(self):
         return self.button
 
@@ -99,6 +114,9 @@ class Gaitmate:
 
     def getHapticPin(self):
         return self.hapticPin
+
+    def getHaptic2Pin(self):
+        return self.hapticPin2
 
     def getButtonPin(self):
         return self.buttonPin
@@ -170,8 +188,19 @@ class Gaitmate:
 
     def testHaptic(self):
         print("Testing haptics..")
-        self.hapticAction().metronome(self.metronomeDelay, 5,
-                                      settings.stepdownDelay)
+
+        p1 = Process(target=self.hapticAction().metronome
+                     args=(self.metronomeDelay, 5, settings.stepdownDelay))
+        p1.start()
+
+        if (settings.enableSecondHaptic):
+            p2 = Process(target=self.haptic2Action().metronome
+                         args=(self.metronomeDelay, 5, settings.stepdownDelay))
+            p2.start()
+
+            p1.join()
+            p2.join()
+
         print("\t.. done.\n")
 
     def testButton(self):
@@ -198,7 +227,7 @@ class Gaitmate:
                 if (settings.laserToggle):
                     self.laserAction().step(0.2)
                 else:
-                    print("\tLaserToggle is set to off in InitSettings.py. " + 
+                    print("\tLaserToggle is set to off in InitSettings.py. " +
                           "Exiting..")
                     break
         except KeyboardInterrupt:
@@ -212,7 +241,7 @@ class Gaitmate:
             self.ledAction().metronome(self.metronomeDelay, 5)
         except KeyboardInterrupt:
             print("\t.. done.\n")
-    
+
     #
     # Main Execution loop of the Gaitmate.
     #
@@ -270,12 +299,21 @@ class Gaitmate:
                      )
         p1.start()
 
-        p2 = Process(target=self.checkWalking, 
-                     args=(send_end, 
+        p2 = Process(target=self.checkWalking,
+                     args=(send_end,
                            settings.vibrationState_Duration
                            )
                      )
         p2.start()
+
+        if (settings.enableSecondHaptic):
+            p3 = Process(target=self.haptic2Action().metronome,
+                         args=(self.metronomeDelay,
+                               settings.vibrationState_Duration
+                               )
+                         )
+            p3.start()
+            p3.join()
 
         p1.join()
         p2.join()
@@ -295,7 +333,7 @@ class Gaitmate:
         self.state.changeState(self.state.StateType.RECOVERING)
         self.ledAction().toggleOn()
 
-        if (settings.laserToggle): 
+        if (settings.laserToggle):
             self.laserAction().toggleOn()
         else:
             self.laserAction().toggleOff()
@@ -312,6 +350,10 @@ class Gaitmate:
                 # If walking okay, do walking state.
                 p1.terminate()
                 self.hapticAction().toggleOff()
+
+                if (settings.enableSecondHaptic):
+                    self.haptic2Action().toggleOff()
+
                 self.buzzerAction().toggleOff()
                 self.doWalkingState()
             else:
@@ -323,9 +365,13 @@ class Gaitmate:
     def hapticAndBuzzerMetronome(self, delay, stepdownDelay=0.375):
         while True:
             GPIO.output(self.hapticPin, GPIO.HIGH)
+            if (settings.enableSecondHaptic):
+                GPIO.output(self.hapticPin2, GPIO.HIGH)
             GPIO.output(self.buzzerPin, GPIO.HIGH)
             time.sleep(stepdownDelay)
-            GPIO.output(self.hapticPin, GPIO.LOW)
+            GPIO.output(self.hapticPin, GPIO.LOW)a
+            if (settings.enableSecondHaptic):
+                GPIO.output(self.hapticPin2, GPIO.LOW)
             GPIO.output(self.buzzerPin, GPIO.LOW)
             time.sleep(delay)
 
@@ -391,5 +437,7 @@ class Gaitmate:
             if process is not None:
                 process.terminate()
                 self.hapticAction().toggleOff()
+                if (settings.enableSecondHaptic):
+                    self.haptic2Action().toggleOff()
                 self.buzzerAction().toggleOff()
             self.doPausedState()

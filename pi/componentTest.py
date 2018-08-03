@@ -15,6 +15,7 @@ def main():
     # PINOUT
     #
     # Buzzer:  PIN 11   BCM 17
+    # Buzzer2: PIN 36   BCM 16
     # Haptic:  PIN 13   BCM 27
     # LED:     PIN 22   BCM 25
     # Button:  PIN 31   BCM 6
