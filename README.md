@@ -129,7 +129,7 @@ This ensures that the functions defined in `Gaitmate.py` are working properly.
 
 ## Terminal Instructions
 If you do not know how to navigate a computer using Terminal, don't worry! 
-bunch of resources online exist that can help you out. I recommend the [crash
+A bunch of resources online exist that can help you out. I recommend the [crash
 course by Code Academy](https://www.codeacademy.com/learn/learn-the-command-line/)
 to at least get a rudimentary knowledge of everything before you delve deep into
 the code here (otherwise, you may get lost).
@@ -140,7 +140,7 @@ minimum Terminal knowledge required to SSH into the Raspberry Pi, navigate to
 the project folder, edit files, and run scripts.
 
 ### SSHing into the Raspberry Pi
-ABBA (the Raspberry Pi) is reachable through many different avenues -- however,
+Our Raspberry Pi, 'abba', is reachable through many different avenues -- however,
 the most efficient way on her is to SSH into her. This can be easily done
 assuming you are on the same wifi network. To begin, type the following into
 your Terminal:
@@ -160,14 +160,19 @@ You can see if you are in the correct terminal by looking at the user callsign
 to the left of your cursor (it should say something along the lines of
 'pi@abba', followed by your current working directory).
 
-You might be asking: "Why did you name the Raspberry Pi 'Abba', Sammy? Why did
+It's worth noting that as soon as you SSH into abba, you'll find that a script
+is automatically running -- this is the main code of the GaitMate. To exit,
+simply press 'control + c'. **This is required if you are intending to change
+the contents of the code.** 
+
+Now, you might be asking: "Why did you name the Raspberry Pi 'abba', Sammy? Why did
 you give the Raspberry Pi a name in the first place?".
 
 To which I just stare blankly back at you, shrug, and take a bite of a bartlett pear I
 inexplicably procured from seemingly nowhere. *Mm. __Delicious.__*
 
 ### Updating from git
-If you're reading this off ABBA (The Raspberry Pi), updating the code is
+If you're reading this off the Raspberry Pi, updating the code is
 probably a good idea because I might be updating a couple things from home now
 and then. To update the code simply type:
 ```
