@@ -66,7 +66,7 @@ inputted into the same model as the same classification to simplify the problem
 and increase accuracy.
 
 
-## File Breakdown
+## File Breakdown (Packages)
 The following section was created in order to help explain the structure of the
 code and give an inkling as to what the purpose of each .py file in this
 workspace is.
@@ -85,7 +85,7 @@ implementation of the Gaitmate.
 This package contains the finite deterministic automata-inspired State class,
 which is used for much of the decision-making code found in the core code.
 
-#### [`pi/Component/`](pi/Component/)
+#### [`pi/HaqPi/Component/`](pi/HaqPi/Component/)
 This package contains all of the object representations of the Raspberry Pi's
 onboard components. Although things such as the LEDs, buttons and buzzers can be
 implemented by `OutputComponent.py`, the child classes such as `LED.py` contain
@@ -101,16 +101,17 @@ This package contains both the `SaveFileHelper` and `LoadFileHelper` class,
 which are used to save and parse the log files (both for training the
 DecisionTree machine learning algorithm and testing it in real-time).
 
-#### [`componentTest.py`](pi/componentTest.py)
-This is a simple driver code for testing all of the components for the Gaitmate.
-This ensures that the functions defined in `Gaitmate.py` are working properly.
-
 #### [`Gaitmate.py`](pi/Gaitmate.py)
 This python class is where all components of the Raspberry Pi come together in
 one interface. It contains the initialization for all of the classes, and acts
 as the "front-end" for all of the other code. All code is run through this
 script. Acting as the controller, `Main.py` calls on this to do most of the
 work. It contains the methods for checking walking, state execution, etc.
+
+## File Breakdown (Driver Code)
+The files talked about in the previous section are the "foundation" of the code.
+If you are unsure as to how to run these, please refer to the 'Terminal
+Instructions' in the back of this README.
 
 #### [`Main.py`](pi/Main.py)
 This code is the code to execute when running the Gaitmate normally. This script
@@ -121,9 +122,51 @@ it then tells the Gaitmate to start its cycle (in the paused state).
 #### [`resetGPIO.py`](pi/resetGPIO.py)
 Simple driver code to reset all GPIO pins.
 
+#### [`componentTest.py`](pi/componentTest.py)
+This is a simple driver code for testing all of the components for the Gaitmate.
+This ensures that the functions defined in `Gaitmate.py` are working properly.
 
-### Terminal Instructions (for git and everything)
-#### Updating from git
+
+## Terminal Instructions
+If you do not know how to navigate a computer using Terminal, don't worry! 
+bunch of resources online exist that can help you out. I recommend the [crash
+course by Code Academy](https://www.codeacademy.com/learn/learn-the-command-line/)
+to at least get a rudimentary knowledge of everything before you delve deep into
+the code here (otherwise, you may get lost).
+
+However, I completely get it if you don't want to spend time learning how to use
+a bash shell, I get it. In this section, I'm going to try to give you the bare
+minimum Terminal knowledge required to SSH into the Raspberry Pi, navigate to
+the project folder, edit files, and run scripts.
+
+### SSHing into the Raspberry Pi
+ABBA (the Raspberry Pi) is reachable through many different avenues -- however,
+the most efficient way on her is to SSH into her. This can be easily done
+assuming you are on the same wifi network. To begin, type the following into
+your Terminal:
+```
+ssh pi@abba.local
+```
+'pi' is the username on abba. 'abba.local' refers to the name of the machine.
+**Note that this only works if you are on the same wifi network. abba.local is
+only understood by your computer if it detects a computer by the name 'abba' on
+the wifi network.** If SSH is not successful and you timeout, you can safely 
+assume that 1) you and abba are not connected to the same wifi network or 2)
+abba is not powered up completely yet.
+
+After this, you will be prompted to enter in a password. The password for abba
+is 'gaitmate2018'. If all goes well, you should be greeted with a new Terminal.
+You can see if you are in the correct terminal by looking at the user callsign
+to the left of your cursor (it should say something along the lines of
+'pi@abba', followed by your current working directory).
+
+You might be asking: "Why did you name the Raspberry Pi 'Abba', Sammy? Why did
+you give the Raspberry Pi a name in the first place?".
+
+To which I just stare blankly back at you, shrug, and take a bite of a bartlett pear I
+inexplicably procured from seemingly nowhere. *Mm. __Delicious.__*
+
+### Updating from git
 If you're reading this off ABBA (The Raspberry Pi), updating the code is
 probably a good idea because I might be updating a couple things from home now
 and then. To update the code simply type:
@@ -131,9 +174,16 @@ and then. To update the code simply type:
 git pull origin master
 ```
 **Note that this requires your information -- this means your username and
-password for [GitHub](https://www.github.com/).** If you don't have permission to access the files (these files are located in a private respository), email me at sammy.haq1@gmail.com (or just request permission through GitHub).
+password for [GitHub](https://www.github.com/).** If you don't have permission
+to access the files (these files are located in a private respository), email me
+at sammy.haq1@gmail.com (or just request permission through GitHub).
 
-####
+I currently have auto-pushing to the repository disabled, because I don't want
+the master branch to be modified without my knowledge (and proper testing to ensure
+it works). If you have an edit to make, please make a merge request so I can
+take a look at it before submitting.
+
+### Running a Python Script
 To run any of the python scripts, be sure that you are in the same spot the
 files are in.
 To view what directory you're currently in when using Terminal, type:
