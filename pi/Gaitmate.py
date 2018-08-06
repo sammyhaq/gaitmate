@@ -57,7 +57,6 @@ class Gaitmate:
         self.buzzer = Buzzer(self.buzzerPin)
         self.haptic = OutputComponent(self.hapticPin)
 
-
         self.haptic2 = None
         if (settings.enableSecondHaptic):
             self.haptic2 = OutputComponent(self.hapticPin2)
@@ -197,6 +196,8 @@ class Gaitmate:
                          args=(self.metronomeDelay, 5, settings.stepdownDelay))
             p2.start()
 
+            print("secondary haptic enabled. Joining processes..")
+
             p1.join()
             p2.join()
 
@@ -312,10 +313,14 @@ class Gaitmate:
                                )
                          )
             p3.start()
-            p3.join()
 
-        p1.join()
-        p2.join()
+            p1.join()
+            p2.join()
+            p3.join()
+        
+        else:
+            p1.join()
+            p2.join()
 
         if (recv_end.recv()):
             # If walking okay, do walking state.
