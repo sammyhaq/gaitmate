@@ -57,10 +57,10 @@ class Gaitmate:
         self.buzzer = Buzzer(self.buzzerPin)
         self.haptic = OutputComponent(self.hapticPin)
 
+
+        self.haptic2 = None
         if (settings.enableSecondHaptic):
             self.haptic2 = OutputComponent(self.hapticPin2)
-        else:
-            self.haptic2 = None
 
         self.button = Button(self.buttonPin)
         self.laser = OutputComponent(self.laserPin)
