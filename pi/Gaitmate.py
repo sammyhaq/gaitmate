@@ -44,10 +44,9 @@ class Gaitmate:
         self.buzzerPin = buzzerPin
         self.hapticPin = hapticPin
 
+        self.hapticPin2 = None
         if (settings.enableSecondHaptic):
             self.hapticPin2 = settings.secondaryHapticPin
-        else:
-            self.hapticPin2 = None
 
         self.buttonPin = buttonPin
         self.laserPin = laserPin
