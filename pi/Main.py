@@ -14,12 +14,13 @@ import dataCollector
 # LED:     PIN 22   BCM 25
 # Button:  PIN 31   BCM 6
 # Laser:   PIN 29   BCM 5
+# JBox:    PIN 37   BCM 26
 ##
 
 
 def main():
     controller = Gaitmate(0x68, 17, 27, 6, 5, 25)
-    jBoxListener = JuiceBoxListener(16, controller)
+    jBoxListener = JuiceBoxListener(settings.juiceBoxPin, controller)
 
     recv_end, send_end = Pipe(False)
 

@@ -36,5 +36,8 @@ class InitSettings:
     # not via the physical pin number (i.e. by default, the secondary haptic is
     # located in physical pin 36, which is known as BCM pin 16. Therefore, the
     # number assigned to secondaryPinHaptic is 16).
-    enableSecondHaptic = False
+    enableSecondHaptic = True
     secondaryHapticPin = 16
+
+    # Pin that the JuiceBoxListener will reference to see if shutoff is needed.
+    juiceBoxPin = 26
