@@ -35,6 +35,6 @@ class InitSettings:
     # assignment of the secondary haptic pin is according to the BCM denotation,
     # not via the physical pin number (i.e. by default, the secondary haptic is
     # located in physical pin 36, which is known as BCM pin 16. Therefore, the
-    # number assigned to secondaryPinHaptic is 16.)
+    # number assigned to secondaryPinHaptic is 16).
     enableSecondHaptic = False
     secondaryHapticPin = 16
