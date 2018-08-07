@@ -11,24 +11,49 @@ something goes wrong.
 
 """
 
+# Machine Learning stuff.
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.externals import joblib
 from sklearn.metrics import classification_report, confusion_matrix
+
+# File manipulation, command line execution, etc.
 import sys
+
+# For the Automaton structure this code is designed around.
 from Automata.State import State
+
+# Raspberry Pi GPIO library.
 import RPi.GPIO as GPIO
+
+# For sleeping, delays, etc.
 import time
+
+# Component code of my own design.
 from HaqPi.Component.OutputComponent import OutputComponent
 from HaqPi.Component.MPU6050 import MPU6050
 from HaqPi.Component.Button import Button
 from HaqPi.Component.LED import LED
 from HaqPi.Component.Buzzer import Buzzer
+
+# Helps save and write log files.
 from FileHelper.SaveFileHelper import SaveFileHelper
 from FileHelper.LoadFileHelper import LoadFileHelper
+
+# For math/matrix operations.
 import numpy as np
+
+# For doing multiple things at once.
 from multiprocessing import Process, Pipe
+
+# Just to make the command-line execution look pretty.
 from HaqPyTools import UI
+
+# Loading variables specified in InitSettings.py..
 from InitSettings import InitSettings as settings
+
+# For audio-to-bluetooth purposes.
+import pyaudio
+import wave
 
 
 class Gaitmate:
@@ -66,7 +91,7 @@ class Gaitmate:
         self.led = LED(self.ledPin)
 
         self.metronomeDelay = ((float(60)/settings.numberOfSteps) -
-        (settings.stepdownDelay))
+                               (settings.stepdownDelay))
         
         if (self.metronomeDelay <= 0):
             print("\t**ERROR** Not a valid numberOfSteps defined in" +
@@ -368,11 +393,14 @@ class Gaitmate:
     # multiprocessing time.
     def hapticAndBuzzerMetronome(self, delay, stepdownDelay=0.375):
         while True:
+
             GPIO.output(self.hapticPin, GPIO.HIGH)
             if (settings.enableSecondHaptic):
                 GPIO.output(self.hapticPin2, GPIO.HIGH)
             GPIO.output(self.buzzerPin, GPIO.HIGH)
+
             time.sleep(stepdownDelay)
+            
             GPIO.output(self.hapticPin, GPIO.LOW)
             if (settings.enableSecondHaptic):
                 GPIO.output(self.hapticPin2, GPIO.LOW)
