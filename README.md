@@ -1,7 +1,7 @@
 # GaitMate
 By: Zach Samalonis, Jess Montelone, Abigail Balster, Sammy Haq
 
-Developed for the RESNA 2018 Student Design Competition. Winnner second place and recipient of the TREAT Award (most likely to market).
+Developed for the RESNA 2018 Student Design Competition. Second place and recipient of the TREAT Award (most likely to market).
 
 ## Overview
 
