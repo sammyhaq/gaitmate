@@ -12,7 +12,7 @@ Gaitmate was further developed on the Raspberry Pi Zero W to develop
 more robust code and features.
 
 ## State Execution
-The overall theoretical execution of this device is akin to that of a finate
+The overall theoretical execution of this device is akin to that of a finite
 deterministic automata with 4 states: "walking", "vibrating", "recovering", and
 "paused." Details of each state are shown below:
 
