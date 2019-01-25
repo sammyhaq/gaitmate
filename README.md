@@ -1,7 +1,7 @@
 # GaitMate
 By: Zach Samalonis, Jess Montelone, Abigail Balster, Sammy Haq
 
-Developed for the RESNA 2018 Student Design Competition.
+Developed for the RESNA 2018 Student Design Competition. Won second place and receiver of the TREAT Award (most likely to market).
 
 ## Overview
 
@@ -226,5 +226,3 @@ To run any python script (`ledTest.py`,`trainModel_main.py`, `gaitmateTest.py`),
 ```
 python gaitmateTest.py
 ```
-
-Let me know if you have any questions via email. If it's immediate, ask Zach for my phone number and just text me (or message me via Facebook).
